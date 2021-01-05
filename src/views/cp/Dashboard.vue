@@ -122,6 +122,7 @@ export default {
     },
   }),
   beforeMount: async function () {
+    console.log(process.env.VUE_APP_CONTRACT_ADDRESS)
     // Get Presales 
     await this.getPresalesGraph();
     await this.getPresalesTable();

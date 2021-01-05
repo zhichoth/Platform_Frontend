@@ -1,7 +1,14 @@
 :<template>
-  <div id="yield" class="block px-4 mt-6 sm:px-6 lg:px-8">
-    <div class="dark:bg-gray-800 p-3 py-10 rounded-lg">
-      <Chart style="height: 200px; width: 100%;" :chartData="chartData" :options="options" />
+  <div id="yield">
+    <div class="block px-4 mt-6 sm:px-6 lg:px-8">
+      <div class="dark:bg-gray-800 p-3 py-10 rounded-lg">
+        <Chart style="height: 200px; width: 100%;" :chartData="chartData" :options="options" />
+      </div>
+    </div>
+    <div class="block px-4 mt-6 sm:px-6 lg:px-8">
+      <div class="dark:bg-gray-800 p-3 py-10 rounded-lg">
+        <Chart style="height: 200px; width: 100%;" :chartData="chartData" :options="options" />
+      </div>
     </div>
   </div>
 </template>

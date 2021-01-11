@@ -14,8 +14,8 @@
       <ul class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 mt-3">
         <li>
           <div class="max-w-5xl mx-auto px-4 sm:px-4 lg:px-4 rounded-tl-lg rounded-tr-lg bg-gray-50 dark:bg-gray-800 text-center border border-gray-200 border-b-0">
-              <h1 class="inline-block p-10 text-4xl">
-                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">655,923.55632</span>
+              <h1 class="inline-block text-center py-10 text-2xl">
+                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">{{ formatAmount(yieldPool.totalYsecStaked) }}</span>
               </h1>
           </div>
           <div class="flex-root pt-2 pb-2 pl-6 rounded-bl-lg rounded-br-lg bg-yellow-500 text-center">
@@ -26,8 +26,8 @@
         </li>
         <li>
           <div class="max-w-5xl mx-auto px-4 sm:px-4 lg:px-4 rounded-tl-lg rounded-tr-lg bg-gray-50 dark:bg-gray-800 text-center border border-gray-200 border-b-0">
-              <h1 class="inline-block p-10 text-4xl">
-                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">11,923.55632</span>
+              <h1 class="inline-block text-center py-10 text-2xl">
+                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">{{ formatAmount(yieldPool.accountYsecStaked) }}</span>
               </h1>
           </div>
           <div class="flex-root pt-2 pb-2 pl-6 rounded-bl-lg rounded-br-lg bg-yellow-500 text-center">
@@ -38,8 +38,8 @@
         </li>
         <li>
           <div class="max-w-5xl mx-auto px-4 sm:px-4 lg:px-4 rounded-tl-lg rounded-tr-lg bg-gray-50 dark:bg-gray-800 text-center border border-gray-200 border-b-0">
-              <h1 class="inline-block p-10 text-4xl">
-                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">6,3946</span>
+              <h1 class="inline-block text-center py-10 text-2xl">
+                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">{{ formatAmount(yieldPool.estReward) }}</span>
               </h1>
           </div>
           <div class="flex-root pt-2 pb-2 pl-6 rounded-bl-lg rounded-br-lg bg-yellow-500 text-center">
@@ -50,8 +50,8 @@
         </li>
         <li>
           <div class="max-w-5xl mx-auto px-4 sm:px-4 lg:px-4 rounded-tl-lg rounded-tr-lg bg-gray-50 dark:bg-gray-800 text-center border border-gray-200 border-b-0">
-              <h1 class="inline-block p-10 text-4xl">
-                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">373</span>
+              <h1 class="inline-block text-center py-10 text-2xl">
+                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">{{ formatAmount(yieldPool.ETHPool) }}</span>
               </h1>
           </div>
           <div class="flex-root pt-2 pb-2 pl-6 rounded-bl-lg rounded-br-lg bg-yellow-500 text-center">
@@ -62,8 +62,8 @@
         </li>
         <li>
           <div class="max-w-5xl mx-auto px-4 sm:px-4 lg:px-4 rounded-tl-lg rounded-tr-lg bg-gray-50 dark:bg-gray-800 text-center border border-gray-200 border-b-0">
-              <h1 class="inline-block p-10 text-4xl">
-                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">27</span>
+              <h1 class="inline-block text-center py-10 text-2xl">
+                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">{{ yieldPool.preSales }}</span>
               </h1>
           </div>
           <div class="flex-root pt-2 pb-2 pl-6 rounded-bl-lg rounded-br-lg bg-yellow-500 text-center">
@@ -74,8 +74,8 @@
         </li>
         <li>
           <div class="max-w-5xl mx-auto px-4 sm:px-4 lg:px-4 rounded-tl-lg rounded-tr-lg bg-gray-50 dark:bg-gray-800 text-center border border-gray-200 border-b-0">
-              <h1 class="inline-block p-10 text-4xl">
-                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">123</span>
+              <h1 class="inline-block text-center py-10 text-2xl">
+                <span class="block text-gray-800 dark:text-white font-semibold tracking-wide uppercase">{{ yieldPool.participants }}</span>
               </h1>
           </div>
           <div class="flex-root pt-2 pb-2 pl-6 rounded-bl-lg rounded-br-lg bg-yellow-500 text-center">
@@ -90,17 +90,30 @@
 </template>
 
 <script>
+import BigNumber from "bignumber.js";
 import Chart from '@/components/views/yield/charts/Pool.Chart'
 
 export default {
   name: 'Yield.views.components',
   props: {
+    yieldPool: Object,
     chartData: Object,
     options: Object,
   },
   components: {
     Chart
   },
+  methods: {
+    formatAmount: function (amount) {
+      if (amount > 0) {
+        const value = new BigNumber(amount);
+        return value.shiftedBy(-18);
+        // const formatAmount = parseInt(amount, 16).toString();
+        // return formatAmount.substring(0, formatAmount.length-4);
+      }
+      return amount;
+    },
+  }
 }
 </script>
 

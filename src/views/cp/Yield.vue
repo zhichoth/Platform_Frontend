@@ -139,6 +139,9 @@ export default {
     }
   },
   mounted: async function () {
+    // IsBusy
+    this.$emit('toggleIsBusy', true);
+
     if (this.account === '') {
       // Detect provider
       await this.detectProvider();
@@ -148,6 +151,9 @@ export default {
       await this.getContractData();
     }
     this.isLoaded = true;
+
+    // IsBusy
+    this.$emit('toggleIsBusy', false);
   },
   methods: {
     detectProvider: async function () {
@@ -158,6 +164,7 @@ export default {
     },
     currentAccount: async function () {
       // connect to MetaMask account
+      this.chainId = this.provider.chainId;
       this.provider
         .request({ method: 'eth_accounts' })
         .then(this.handleAccountsChanged(this.provider._state.accounts))

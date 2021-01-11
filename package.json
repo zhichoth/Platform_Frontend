@@ -15,6 +15,7 @@
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "dotenv-webpack": "^6.0.0",
+    "lottie-web": "^5.7.5",
     "metamask-extension-provider": "^2.0.0",
     "node": "^15.4.0",
     "node-sass": "^5.0.0",

@@ -127,11 +127,15 @@ export default {
     await this.getPresalesTable();
   },
   mounted: async function () {
+    // IsBusy
+    this.$emit('toggleIsBusy', true);
     // Detect provider
     await this.detectProvider();
     // Connect to your account
     await this.currentAccount();
     this.isLoaded = true;
+    // IsBusy
+    this.$emit('toggleIsBusy', false);
   },
   methods: {
     detectProvider: async function () {

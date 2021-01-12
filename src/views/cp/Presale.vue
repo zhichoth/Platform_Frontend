@@ -1,0 +1,269 @@
+<template>
+    <div id="presale" class="h-full">
+      <!-- Search header -->
+      <div class="z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
+        <!-- Sidebar toggle, controls the 'sidebarOpen' sidebar state. -->
+        <button class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden">
+          <span class="sr-only">Open sidebar</span>
+          <!-- Heroicon name: menu-alt-1 -->
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+          </svg>
+        </button>
+        <div class="flex-1 flex justify-between px-4 sm:px-6 lg:px-8">
+          <div class="flex-1 flex">
+            <Search />
+          </div>
+          <div class="flex items-center">
+            <Profile />
+          </div>
+        </div>
+      </div>
+      <transition name="slide-fade">
+        <main v-if="isLoaded" class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
+          <Header
+              :contractAddress="contractAddress"
+              :isConnected="isConnected"
+              :account="account"
+              :chainId="chainId" />
+
+          <AlertModal
+              v-if="showAlert"
+              :alert="alert"
+              :showConnectionButton="showConnectionButton"
+              :showDownloadButton="showDownloadButton"
+              @connectAccount="connectAccount"
+              @closeModal="closeModal" />
+
+          <PageTitle
+              :title="title" />
+
+          <div class="block px-4 mt-6 sm:px-6 lg:px-8">
+            <div v-if="preSaleProgress === 1" class="mt-8 text-center">
+              <h1 class="text-4xl font-extrabold text-gray-200">
+                Tokenomics
+              </h1>
+              <h3 class="text-4xl font-light text-gray-200">
+                Enter your tokenomics
+              </h3>
+              <h3 v-if="totalSupply > 0" class="text-2xl pt-6 font-light text-yellow-500">
+                Total supply: {{ totalSupply }}
+              </h3>
+              <div class="h-3 mx-auto mt-4 relative max-w-xl rounded-full overflow-hidden">
+                <div class="w-full h-full bg-gray-200 absolute"></div>
+                <div class="h-full bg-yellow-500 absolute" :style="`width: ${progression}%`"></div>
+              </div>
+              <div class="mt-10">
+                <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
+                  <div class="grid grid-cols-1 gap-6">
+                    <div class="col-span-1">
+                      <label :for="totalSupply" class="block text-left text-sm font-medium text-gray-200">
+                        Total supply
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="number" v-model="totalSupply" placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="totalSupply > 0" class="grid grid-cols-3 gap-6">
+                    <div class="col-span-2">
+                      <label :for="preSaleTotal" class="block text-left text-sm font-medium text-gray-200">
+                        Presale allocation
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="number" v-model="preSaleTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      </div>
+                    </div>
+                    <div class="col-span-1">
+                      <label :for="preSalePercentage" class="block text-left text-sm font-medium text-gray-200">
+                        Presale allocation in %
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="text" v-model="preSalePercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="totalSupply > 0" class="grid grid-cols-3 gap-6">
+                    <div class="col-span-2">
+                      <label :for="liquidityTotal" class="block text-left text-sm font-medium text-gray-200">
+                        Liquidity allocation
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="number" v-model="liquidityTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      </div>
+                    </div>
+                    <div class="col-span-1">
+                      <label :for="liquidityPercentage" class="block text-left text-sm font-medium text-gray-200">
+                        Liquidity allocation in %
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="text" v-model="liquidityPercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    v-if="
+                    totalSupply > 0 &&
+                    preSaleTotal > 0 &&
+                    liquidityTotal > 0"
+                    class="grid grid-cols-1 gap-6">
+                    <div class="col-span-1 text-center">
+                      <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        Add Allocation
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="block px-4 mt-6 sm:px-6 lg:px-8">
+            <div v-if="preSaleProgress === 1" class="mt-10 text-center">
+              <h1 class="text-4xl font-extrabold text-gray-200">
+                Unsold tokens
+              </h1>
+              <h3 class="text-4xl font-light text-gray-200">
+                Make a choice
+              </h3>
+              <div class="mt-5">
+                <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
+                  <div class="grid grid-cols-2 gap-6">
+                    <div class="col-span-1 text-center">
+                      <button type="button" class="inline-flex items-center px-4 py-2 border border-yellow-500 shadow-sm text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        Burn remaining tokens
+                      </button>
+                    </div>
+                    <div class="col-span-1 text-center">
+                      <button type="button" class="inline-flex items-center px-4 py-2 border border-yellow-500 shadow-sm text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        Divide remaining tokens
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="block px-4 mt-6 sm:px-6 lg:px-8">
+            <div v-if="preSaleProgress === 1" class="mt-10 text-center">
+              <h1 class="text-4xl font-extrabold text-gray-200">
+                ETH Hard & Softcap
+              </h1>
+              <h3 class="text-4xl font-light text-gray-200">
+                Price per token
+              </h3>
+              <div class="mt-5">
+                <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
+                  <div class="grid grid-cols-1 gap-6">
+                    <div class="col-span-1">
+                      <label :for="ETHSupply" class="block text-left text-sm font-medium text-gray-200">
+                        ETH supply
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="number" v-model="ETHSupply" placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-6">
+                    <div class="col-span-2">
+                      <label :for="tokenPriceETH" class="block text-left text-sm font-medium text-gray-200">
+                        Token price in ETH
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="number" v-model="tokenPriceETH" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      </div>
+                    </div>
+                    <div class="col-span-1">
+                      <label :for="tokenPrice" class="block text-left text-sm font-medium text-gray-200">
+                        Token price in $
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="text" v-model="tokenPriceDollar" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </transition>
+    </div>
+</template>
+
+<script>
+import Search from '@/components/search/Form'
+import Profile from '@/components/Profile'
+import AlertModal from '@/components/alerts/Modal'
+import Header from '@/components/Header'
+import PageTitle from '@/components/PageTitle'
+
+export default {
+  name: 'presale.views',
+  components: {
+    Search,
+    Profile,
+    AlertModal,
+    Header,
+    PageTitle
+  },
+  data: () => ({
+    contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
+    isConnected: false,
+    showAlert: false,
+    isLoaded: false,
+    title: 'Presale',
+    account: '',
+    provider: window.ethereum,
+    chainId: null,
+    preSaleProgress: 1,
+    progression: 0,
+    totalSupply: 0,
+    preSaleTotal: 600000,
+    preSalePercentage: 60,
+    liquidityTotal: 150000,
+    liquidityPercentage: 15,
+    ETHSupply: 0,
+    tokenPriceETH: 0,
+    tokenPriceDollar: 0,
+    alert: {
+      title: '',
+      msg: ''
+    },
+  }),
+  beforeMount: async function() {
+    if (this.$store.getters.account !== '') {
+      this.account = this.$store.getters.account;
+      this.chainId = this.provider.chainId;
+      this.isConnected = true;
+    }
+  },
+  mounted: function () {
+    this.isLoaded = true;
+  },
+  watch: {
+    preSaleTotal: {
+      handler: function (value) {
+        if (this.totalSupply < 0) return;
+
+        this.preSalePercentage = (100 * value) / this.totalSupply;
+
+        this.progression = this.preSalePercentage + this.liquidityPercentage;
+      },
+    },
+    liquidityTotal: {
+      handler: function (value) {
+        if (this.totalSupply < 0) return;
+
+        this.liquidityPercentage = (100 * value) / this.totalSupply;
+
+        this.progression = this.preSalePercentage + this.liquidityPercentage;
+      },
+    },
+  }
+};
+</script>

@@ -140,7 +140,7 @@ export default {
   },
   mounted: async function () {
     // IsBusy
-    this.$emit('toggleIsBusy', true);
+    // this.$emit('toggleIsBusy', true);
 
     if (this.account === '') {
       // Detect provider
@@ -153,7 +153,7 @@ export default {
     this.isLoaded = true;
 
     // IsBusy
-    this.$emit('toggleIsBusy', false);
+    // this.$emit('toggleIsBusy', false);
   },
   methods: {
     detectProvider: async function () {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Dashboard from '../views/cp/Dashboard.vue'
 import Yield from '../views/cp/Yield.vue'
+import Presale from '../views/cp/Presale.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes: Array<RouteConfig> = [
     path: '/yield-dashboard',
     name: 'yield.dashboard',
     component: Yield
+  },
+  {
+    path: '/presale/create',
+    name: 'presale.create',
+    component: Presale
   },
 ]
 

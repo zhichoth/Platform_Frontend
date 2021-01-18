@@ -1,12 +1,12 @@
 <template>
   <div id="dashboard" class="h-full">
     <!-- Search header -->
-    <div v-if="loaded" class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
+    <div v-if="isLoaded" class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
       <!-- Sidebar toggle, controls the 'sidebarOpen' sidebar state. -->
       <button class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden">
         <span class="sr-only">Open sidebar</span>
         <!-- Heroicon name: menu-alt-1 -->
-        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
         </svg>
       </button>
@@ -20,31 +20,31 @@
       </div>
     </div>
     <transition name="slide-fade">
-      <main v-if="loaded" class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
+      <main v-if="isLoaded" class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
         <Header 
-          :contractAddress="contractAddress"
-          :isConnected="isConnected" 
-          :account="account"
-          :chainId="chainId" />
+            :contractAddress="contractAddress"
+            :isConnected="isConnected"
+            :account="account"
+            :chainId="chainId" />
 
         <AlertModal 
-          v-if="showAlert" 
-          :alert="alert" 
-          :showConnectionButton="showConnectionButton"
-          :showDownloadButton="showDownloadButton"
-          @connectAccount="connectAccount"
-          @closeModal="closeModal" />
+            v-if="showAlert"
+            :alert="alert"
+            :showConnectionButton="showConnectionButton"
+            :showDownloadButton="showDownloadButton"
+            @connectAccount="connectAccount"
+            @closeModal="closeModal" />
 
         <PageTitle 
-          :title="title" />
+            :title="title" />
         
         <PreSales 
-          :presales="presalesChart" 
-          :chartData="chartData" 
-          :options="options" />
+            :presales="presalesChart"
+            :chartData="chartData"
+            :options="options" />
 
         <PreSalesTable 
-          :presales="presaleTable" />
+            :presales="presaleTable" />
       </main>
     </transition>
   </div>
@@ -78,19 +78,19 @@ export default {
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
     isConnected: false,
     showAlert: false,
+    isLoaded: false,
+    title: 'Dashboard',
+    account: '',
+    provider: window.ethereum,
+    chainId: null,
+    presalesChart: [], // empty array
+    presaleTable: [], // empty array
+    showConnectionButton: false,
+    showDownloadButton: false,
     alert: {
       title: '',
       msg: ''
     },
-    showConnectionButton: false,
-    showDownloadButton: false,
-    title: 'Dasboard',
-    presalesChart: [], // empty array
-    presaleTable: [], // empty array
-    loaded: false,
-    provider: window.ethereum,
-    chainId: null,
-    account: '',
     chartData: {
         labels: [
           'Uniswap Liquidity', 
@@ -122,21 +122,25 @@ export default {
     },
   }),
   beforeMount: async function () {
-    // Get Presales 
+    // Get Presales
     await this.getPresalesGraph();
     await this.getPresalesTable();
   },
   mounted: async function () {
+    // IsBusy
+    this.$emit('toggleIsBusy', true);
     // Detect provider
     await this.detectProvider();
     // Connect to your account
     await this.currentAccount();
-    this.loaded = true;
+    this.isLoaded = true;
+    // IsBusy
+    this.$emit('toggleIsBusy', false);
   },
   methods: {
     detectProvider: async function () {
       // Great change MetaMask is not installed
-      if (this.provider == undefined) {
+      if (this.provider === undefined) {
         return this.showError(
           'MetaMask is not installed.', 
           'It looks like the connection to the MetaMask wallet failed. Try connecting again.',
@@ -244,7 +248,7 @@ export default {
             this.$store.state.account = this.provider._state.accounts[0];
             this.handleAccountsChanged(this.provider._state.accounts);
           } else if (
-            this.$store.getters.account != '' &&
+            this.$store.getters.account !== '' &&
             this.provider._state.accounts.length === 0) {
               this.$store.state.account = '';
               this.handleAccountsChanged(this.provider._state.accounts);

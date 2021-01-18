@@ -1,5 +1,5 @@
 <template>
-  <div id="yield" class="h-full h-screen">
+  <div id="yield" class="h-full">
     <!-- Search header -->
     <div class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
       <!-- Sidebar toggle, controls the 'sidebarOpen' sidebar state. -->
@@ -20,27 +20,28 @@
       </div>
     </div>
     <transition name="slide-fade">
-      <main v-if="loaded" class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
-        <Header 
-          :contractAddress="contractAddress"
-          :isConnected="isConnected" 
-          :account="account"
-          :chainId="chainId" />
+      <main v-if="isLoaded" class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
+        <Header
+            :contractAddress="contractAddress"
+            :isConnected="isConnected"
+            :account="account"
+            :chainId="chainId" />
 
         <AlertModal 
-          v-if="showAlert" 
-          :alert="alert" 
-          :showConnectionButton="showConnectionButton"
-          :showDownloadButton="showDownloadButton"
-          @connectAccount="connectAccount"
-          @closeModal="closeModal" />
+            v-if="showAlert"
+            :alert="alert"
+            :showConnectionButton="showConnectionButton"
+            :showDownloadButton="showDownloadButton"
+            @connectAccount="connectAccount"
+            @closeModal="closeModal" />
 
         <PageTitle 
-          :title="title" />
+            :title="title" />
 
-        <YieldPool 
-          :chartData="chartData" 
-          :options="options" />
+        <YieldPool
+            :yieldPool="yieldPool"
+            :chartData="chartData"
+            :options="options" />
       </main>
     </transition>
   </div>
@@ -48,6 +49,7 @@
 
 <script>
 import axios from 'axios'
+import Web3 from 'web3'
 
 import Search from '@/components/search/Form'
 import Profile from '@/components/Profile'
@@ -70,17 +72,25 @@ export default {
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
     isConnected: false,
     showAlert: false,
+    isLoaded: false,
+    title: 'Yield Dashboard',
+    account: '',
+    provider: window.ethereum,
+    chainId: null,
+    yieldPool: {
+      totalYsecStaked: 0,
+      accountYsecStaked: 0,
+      estReward: 0,
+      ETHPool: 0,
+      preSales: 0,
+      participants: 0
+    },
+    showConnectionButton: false,
+    showDownloadButton: false,
     alert: {
       title: '',
       msg: ''
     },
-    showConnectionButton: false,
-    showDownloadButton: false,
-    title: 'Yield Dasboard',
-    loaded: false,
-    provider: window.ethereum,
-    chainId: null,
-    account: '',
     chartData: {
         labels: ['','','','','','','','','','','',''],
         datasets: [
@@ -118,26 +128,32 @@ export default {
     },
   }),
   beforeMount: async function() {
-    if (this.$store.getters.account != '') {
+    if (this.$store.getters.account !== '') {
       this.account = this.$store.getters.account;
       this.chainId = this.provider.chainId;
       this.isConnected = true;
     }
 
     if (this.isConnected) {
-
-      await this.getRandomData();
-      await this.getContracts();
+      await this.getContractData();
     }
   },
   mounted: async function () {
+    // IsBusy
+    this.$emit('toggleIsBusy', true);
+
     if (this.account === '') {
       // Detect provider
       await this.detectProvider();
       // Connect to your account
       await this.currentAccount();
+      // Read contract data
+      await this.getContractData();
     }
-    this.loaded = true;
+    this.isLoaded = true;
+
+    // IsBusy
+    this.$emit('toggleIsBusy', false);
   },
   methods: {
     detectProvider: async function () {
@@ -148,6 +164,7 @@ export default {
     },
     currentAccount: async function () {
       // connect to MetaMask account
+      this.chainId = this.provider.chainId;
       this.provider
         .request({ method: 'eth_accounts' })
         .then(this.handleAccountsChanged(this.provider._state.accounts))
@@ -160,9 +177,37 @@ export default {
             err);
         });
     },
-    getContracts: async function () {
-      const response = await axios.get(`https://api.etherscan.io/api?module=account&action=balance&address=${process.env.VUE_APP_CONTRACT_ADDRESS}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`);
-      console.log(response.data);
+    getContractData: async function () {
+      const response = await axios.get(`https://api.etherscan.io/api?module=contract&action=getabi&address=${process.env.VUE_APP_CONTRACT_ADDRESS}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`);
+      const result = JSON.parse(response.data.result);
+
+      const web3 = new Web3(this.provider);
+
+      const contract = {
+        abi: result,
+        address: process.env.VUE_APP_CONTRACT_ADDRESS,
+        endpoint: `https://api.etherscan.io/api?module=contract&action=getabi&address=${process.env.VUE_APP_CONTRACT_ADDRESS}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`,
+      };
+
+      const contractInterface = new web3.eth.Contract(contract.abi)
+      contractInterface.options.address = process.env.VUE_APP_CONTRACT_ADDRESS;
+
+      await this.getTotalYsecStaked(contractInterface);
+      await this.getAccountYsecStaked(contractInterface);
+      await this.getEthInPool(contractInterface);
+      this.getEstReward();
+    },
+    getTotalYsecStaked: async function (contractInterface) {
+      this.yieldPool.totalYsecStaked = await contractInterface.methods.stakedBalance().call();
+    },
+    getAccountYsecStaked: async function (contractInterface) {
+      this.yieldPool.accountYsecStaked = await contractInterface.methods.stakeOf(process.env.VUE_APP_STAKE_ADDRESS).call();
+    },
+    getEthInPool: async function (contractInterface) {
+      this.yieldPool.ETHPool = await contractInterface.methods.rewardBalance().call();
+    },
+    getEstReward: function () {
+      this.yieldPool.estReward = (this.yieldPool.accountYsecStaked / this.yieldPool.totalYsecStaked) * this.yieldPool.ETHPool;
     },
     handleAccountsChanged: function (accounts) {
       if (accounts.length === 0) {

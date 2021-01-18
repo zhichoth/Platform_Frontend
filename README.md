@@ -7,7 +7,7 @@
   <br>
 </h1>
 
-<h4 align="center">Readme about YSEC platform. What can you do with it and more....</h4>
+<h4 align="center">Readme about YSEC platform.</h4>
 
 <p align="center">
   <a href="#about">About</a> •

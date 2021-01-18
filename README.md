@@ -1,29 +1,30 @@
-# ysec-dashboard
 
-## Project setup
-```
-npm install
-```
+<h1 align="center">
+  <br>
+  <a href="https://www.ysec.finance"><img src="https://ysec.finance/assets/img/logo.png" alt="Yearn Secure" width="200"></a>
+  <br>
+  YSEC
+  <br>
+</h1>
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+<h4 align="center">Readme about YSEC platform.</h4>
 
-### Compiles and minifies for production
-```
-npm run build
-```
+<p align="center">
+  <a href="#about">About</a> •
+  <a href="#license">License</a>
+</p>
 
-### Run your unit tests
-```
-npm run test:unit
-```
+## About
+YSEC created this automated pre-sale platform where developers can customize their own pre-sales. YSEC token holders will also be able to stake their YSEC to farm more YSEC in the beginning. When the YSEC platform is live, YSEC tokenholders can stake their YSEC into the dividend pool that will be added at the same time the YSEC platform will launch.
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## License
+
+GNU AGPLv3
+
+---
+
+> [ysec.finance](https://www.ysec.finance) &nbsp;&middot;&nbsp;
+> GitHub [@YearnSecure](https://github.com/YearnSecure) &nbsp;&middot;&nbsp;
+> Twitter [@YearnSecure](https://twitter.com/YearnSecure)
+

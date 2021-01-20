@@ -51,9 +51,9 @@
 import axios from 'axios'
 import Web3 from 'web3'
 
-import Search from '@/components/search/Form'
+import Search from '@/components/search/Form.search'
 import Profile from '@/components/Profile'
-import AlertModal from '@/components/alerts/Modal'
+import AlertModal from '@/components/modals/Alert.modals'
 import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
 import YieldPool from '@/components/views/yield/YieldPool.Yield'

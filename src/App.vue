@@ -15,7 +15,7 @@
 <script>
 // import { mapGetters } from "vuex";
 
-import IsBusy from "@/components/is-busy/IsBusy.vue";
+import IsBusy from "@/components/is-busy/IsBusy.is-busy.vue";
 import Sidebar from '@/components/Sidebar'
 import Footer from '@/components/Footer';
 

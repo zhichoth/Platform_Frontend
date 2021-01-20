@@ -40,6 +40,12 @@
 
           <div class="block px-4 mt-6 sm:px-6 lg:px-8">
             <div v-if="preSaleProgress === 1" class="mt-8 text-center">
+              <TokenAddress
+                :account="account"
+                @nextStep="nextStep"/>
+            </div>
+
+            <div v-if="preSaleProgress === 1" class="mt-8 text-center">
               <h1 class="text-4xl font-extrabold text-gray-200">
                 Tokenomics
               </h1>
@@ -102,13 +108,46 @@
                     </div>
                   </div>
                   <div
+                    v-for="(allocation, key) in allocations"
+                    :key="key"
+                    class="grid grid-cols-3 gap-6">
+                    <div class="col-span-1">
+                      <label class="block text-left text-sm font-medium text-gray-200">
+                        Name allocation
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="text" v-model="allocation.name" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      </div>
+                    </div>
+                    <div class="col-span-1">
+                      <label class="block text-left text-sm font-medium text-gray-200">
+                        Amount
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="number" v-model="allocation.amount" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      </div>
+                    </div>
+                    <div class="col-span-1">
+                      <label class="block text-left text-sm font-medium text-gray-200">
+                        Allocation in %
+                      </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="text" v-model="allocation.percentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      </div>
+                    </div>
+                  </div>
+                  <div
                     v-if="
                     totalSupply > 0 &&
                     preSaleTotal > 0 &&
                     liquidityTotal > 0"
-                    class="grid grid-cols-1 gap-6">
+                      class="grid grid-cols-1 gap-6">
                     <div class="col-span-1 text-center">
-                      <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                      <button
+                       v-on:click="addAllocation"
+                       v-if="showAddAllocationButton"
+                       type="button"
+                       class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                           <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                         </svg>
@@ -178,7 +217,7 @@
                       </div>
                     </div>
                     <div class="col-span-1">
-                      <label :for="tokenPrice" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="tokenPriceDollar" class="block text-left text-sm font-medium text-gray-200">
                         Token price in $
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -196,11 +235,12 @@
 </template>
 
 <script>
-import Search from '@/components/search/Form'
+import Search from '@/components/search/Form.search'
 import Profile from '@/components/Profile'
-import AlertModal from '@/components/alerts/Modal'
+import AlertModal from '@/components/modals/Alert.modals'
 import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
+import TokenAddress from '@/components/presale/TokenAddress'
 
 export default {
   name: 'presale.views',
@@ -209,7 +249,8 @@ export default {
     Profile,
     AlertModal,
     Header,
-    PageTitle
+    PageTitle,
+    TokenAddress
   },
   data: () => ({
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
@@ -222,11 +263,15 @@ export default {
     chainId: null,
     preSaleProgress: 1,
     progression: 0,
-    totalSupply: 0,
-    preSaleTotal: 600000,
-    preSalePercentage: 60,
-    liquidityTotal: 150000,
-    liquidityPercentage: 15,
+    tokenAddress: null,
+    totalSupply: null,
+    preSaleTotal: null,
+    preSalePercentage: 0,
+    liquidityTotal: null,
+    liquidityPercentage: 0,
+    allocations: [],
+    allocationsPercentage: null,
+    showAddAllocationButton: true,
     ETHSupply: 0,
     tokenPriceETH: 0,
     tokenPriceDollar: 0,
@@ -245,10 +290,36 @@ export default {
   mounted: function () {
     this.isLoaded = true;
   },
+  methods: {
+    addAllocation: function () {
+      const allocation = {
+        name: '',
+        amount: null,
+        percentage: 0,
+      }
+      this.allocations.push(allocation);
+    },
+    // Emit from TokenAddress Component
+    nextStep: function (tokenAddress, currentStep) {
+      this.tokenAddress = tokenAddress;
+    }
+  },
   watch: {
+    progression: {
+      handler: function () {
+        if (this.progression === 100) {
+          this.showAddAllocationButton = false;
+        } else if (this.progression < 100) {
+          this.showAddAllocationButton = true;
+        } else if (this.progression > 100) {
+          this.showAddAllocationButton = false;
+          // TODO Presale is not valid.
+        }
+      }
+    },
     preSaleTotal: {
       handler: function (value) {
-        if (this.totalSupply < 0) return;
+        if (this.totalSupply <= 0) return;
 
         this.preSalePercentage = (100 * value) / this.totalSupply;
 
@@ -257,13 +328,32 @@ export default {
     },
     liquidityTotal: {
       handler: function (value) {
-        if (this.totalSupply < 0) return;
+        if (this.totalSupply <= 0) return;
 
         this.liquidityPercentage = (100 * value) / this.totalSupply;
 
         this.progression = this.preSalePercentage + this.liquidityPercentage;
       },
     },
+    allocations: {
+      handler: function () {
+        if (this.totalSupply <= 0) return;
+
+        let allocationsPercentage = 0;
+        for (let i = 0; i < this.allocations.length; i++) {
+          allocationsPercentage += (100 * this.allocations[i].amount) / this.totalSupply;
+          this.allocations[i].percentage = (100 * this.allocations[i].amount) / this.totalSupply;
+        }
+
+        this.allocationsPercentage = allocationsPercentage;
+      },
+      deep: true
+    },
+    allocationsPercentage: {
+      handler() {
+        this.progression = this.preSalePercentage + this.liquidityPercentage + this.allocationsPercentage;
+      }
+    }
   }
 };
 </script>

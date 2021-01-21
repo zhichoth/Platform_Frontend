@@ -1,18 +1,18 @@
 <template>
   <div>
-    <h1 class="text-4xl font-extrabold text-gray-200">
+    <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
       Token address
     </h1>
-    <h3 class="text-4xl font-light text-gray-200">
+    <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">
       Enter your token address
     </h3>
     <div class="mt-10">
-      <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
+      <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg border border-gray-200">
         <div class="grid grid-cols-1 gap-6">
           <div class="col-span-1">
             <label
                 :for="tokenAddress"
-                class="block text-left text-sm font-medium text-gray-200">
+                class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
               Token address
             </label>
             <div class="mt-1 flex rounded-md shadow-sm">
@@ -20,7 +20,7 @@
                   type="text"
                   v-model="tokenAddress"
                   placeholder="0xc77661f7af083e628c189ca2577107f37c82563c"
-                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-300 dark:bg-gray-900">
             </div>
             <label
               v-if="error.msg !== ''"

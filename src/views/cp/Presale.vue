@@ -46,10 +46,10 @@
             </div>
 
             <div v-if="preSaleProgress === 1" class="mt-8 text-center">
-              <h1 class="text-4xl font-extrabold text-gray-200">
+              <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
                 Tokenomics
               </h1>
-              <h3 class="text-4xl font-light text-gray-200">
+              <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">
                 Enter your tokenomics
               </h3>
               <h3 v-if="totalSupply > 0" class="text-2xl pt-6 font-light text-yellow-500">
@@ -63,7 +63,7 @@
                 <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
                   <div class="grid grid-cols-1 gap-6">
                     <div class="col-span-1">
-                      <label :for="totalSupply" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="totalSupply" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Total supply
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -73,7 +73,7 @@
                   </div>
                   <div v-if="totalSupply > 0" class="grid grid-cols-3 gap-6">
                     <div class="col-span-2">
-                      <label :for="preSaleTotal" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="preSaleTotal" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Presale allocation
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -81,7 +81,7 @@
                       </div>
                     </div>
                     <div class="col-span-1">
-                      <label :for="preSalePercentage" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="preSalePercentage" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Presale allocation in %
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -91,7 +91,7 @@
                   </div>
                   <div v-if="totalSupply > 0" class="grid grid-cols-3 gap-6">
                     <div class="col-span-2">
-                      <label :for="liquidityTotal" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="liquidityTotal" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-2000">
                         Liquidity allocation
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -99,7 +99,7 @@
                       </div>
                     </div>
                     <div class="col-span-1">
-                      <label :for="liquidityPercentage" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="liquidityPercentage" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Liquidity allocation in %
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -112,7 +112,7 @@
                     :key="key"
                     class="grid grid-cols-3 gap-6">
                     <div class="col-span-1">
-                      <label class="block text-left text-sm font-medium text-gray-200">
+                      <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Name allocation
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -120,7 +120,7 @@
                       </div>
                     </div>
                     <div class="col-span-1">
-                      <label class="block text-left text-sm font-medium text-gray-200">
+                      <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Amount
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -128,7 +128,7 @@
                       </div>
                     </div>
                     <div class="col-span-1">
-                      <label class="block text-left text-sm font-medium text-gray-200">
+                      <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Allocation in %
                       </label>
                       <div class="mt-1 flex rounded-md shadow-sm">
@@ -162,10 +162,10 @@
 
           <div class="block px-4 mt-6 sm:px-6 lg:px-8">
             <div v-if="preSaleProgress === 1" class="mt-10 text-center">
-              <h1 class="text-4xl font-extrabold text-gray-200">
+              <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
                 Unsold tokens
               </h1>
-              <h3 class="text-4xl font-light text-gray-200">
+              <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">
                 Make a choice
               </h3>
               <div class="mt-5">
@@ -189,10 +189,10 @@
 
           <div class="block px-4 mt-6 sm:px-6 lg:px-8">
             <div v-if="preSaleProgress === 1" class="mt-10 text-center">
-              <h1 class="text-4xl font-extrabold text-gray-200">
+              <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
                 ETH Hard & Softcap
               </h1>
-              <h3 class="text-4xl font-light text-gray-200">
+              <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">
                 Price per token
               </h3>
               <div class="mt-5">

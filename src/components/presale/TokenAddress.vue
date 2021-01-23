@@ -15,12 +15,12 @@
                 class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
               Token address
             </label>
-            <div class="mt-1 flex rounded-md shadow-sm">
+            <div class="mt-1 flex rounded-md">
               <input
                   type="text"
                   v-model="tokenAddress"
                   placeholder="0xc77661f7af083e628c189ca2577107f37c82563c"
-                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-300 dark:bg-gray-900">
+                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
             </div>
             <label
               v-if="error.msg !== ''"
@@ -31,11 +31,11 @@
             </label>
             <div
               v-if="isValid"
-              class="mt-5 rounded-md shadow-sm">
+              class="mt-5 rounded-md">
               <button
                 v-on:click="nextStep"
                 type="button"
-                class="inline-flex items-center px-4 py-2 border border-yellow-500 shadow-sm text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                 Next
               </button>
             </div>

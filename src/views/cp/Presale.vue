@@ -66,8 +66,8 @@
                       <label :for="totalSupply" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Total supply
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="number" v-model="totalSupply" placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="number" v-model="totalSupply" placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                   </div>
@@ -76,34 +76,34 @@
                       <label :for="preSaleTotal" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Presale allocation
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="number" v-model="preSaleTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="number" v-model="preSaleTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                     <div class="col-span-1">
                       <label :for="preSalePercentage" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Presale allocation in %
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="text" v-model="preSalePercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="text" v-model="preSalePercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-200 dark:bg-gray-700">
                       </div>
                     </div>
                   </div>
                   <div v-if="totalSupply > 0" class="grid grid-cols-3 gap-6">
                     <div class="col-span-2">
-                      <label :for="liquidityTotal" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-2000">
+                      <label :for="liquidityTotal" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Liquidity allocation
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="number" v-model="liquidityTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="number" v-model="liquidityTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                     <div class="col-span-1">
                       <label :for="liquidityPercentage" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Liquidity allocation in %
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="text" v-model="liquidityPercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="text" v-model="liquidityPercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-200 dark:bg-gray-700">
                       </div>
                     </div>
                   </div>
@@ -115,24 +115,24 @@
                       <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Name allocation
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="text" v-model="allocation.name" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="text" v-model="allocation.name" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                     <div class="col-span-1">
                       <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Amount
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="number" v-model="allocation.amount" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="number" v-model="allocation.amount" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                     <div class="col-span-1">
                       <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Allocation in %
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="text" v-model="allocation.percentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="text" v-model="allocation.percentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-200 dark:bg-gray-700">
                       </div>
                     </div>
                   </div>
@@ -147,7 +147,7 @@
                        v-on:click="addAllocation"
                        v-if="showAddAllocationButton"
                        type="button"
-                       class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                           <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                         </svg>
@@ -172,12 +172,18 @@
                 <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
                   <div class="grid grid-cols-2 gap-6">
                     <div class="col-span-1 text-center">
-                      <button type="button" class="inline-flex items-center px-4 py-2 border border-yellow-500 shadow-sm text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                      <button type="button" v-on:click="setBurnTokens" v-if="!burnTokens" class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        Burn remaining tokens
+                      </button>
+                      <button type="button" v-on:click="setBurnTokens" v-else class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                         Burn remaining tokens
                       </button>
                     </div>
                     <div class="col-span-1 text-center">
-                      <button type="button" class="inline-flex items-center px-4 py-2 border border-yellow-500 shadow-sm text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                      <button type="button" v-on:click="setDivideTokens" v-if="!divideTokens" class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        Divide remaining tokens
+                      </button>
+                      <button type="button" v-on:click="setDivideTokens" v-else class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                         Divide remaining tokens
                       </button>
                     </div>
@@ -199,29 +205,29 @@
                 <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
                   <div class="grid grid-cols-1 gap-6">
                     <div class="col-span-1">
-                      <label :for="ETHSupply" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="totalSupply" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         ETH supply
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="number" v-model="ETHSupply" placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="number" v-model="totalSupply" readonly placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                   </div>
                   <div class="grid grid-cols-3 gap-6">
                     <div class="col-span-2">
-                      <label :for="tokenPriceETH" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="tokenPriceETH" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Token price in ETH
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="number" v-model="tokenPriceETH" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-900">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="number" v-model="tokenPriceETH" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                     <div class="col-span-1">
-                      <label :for="tokenPriceDollar" class="block text-left text-sm font-medium text-gray-200">
+                      <label :for="tokenPriceDollar" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
                         Token price in $
                       </label>
-                      <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="text" v-model="tokenPriceDollar" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-700">
+                      <div class="mt-1 flex rounded-md">
+                        <input type="text" v-model="tokenPriceDollar" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                   </div>
@@ -235,6 +241,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 import Search from '@/components/search/Form.search'
 import Profile from '@/components/Profile'
 import AlertModal from '@/components/modals/Alert.modals'
@@ -272,6 +280,8 @@ export default {
     allocations: [],
     allocationsPercentage: null,
     showAddAllocationButton: true,
+    divideTokens: false,
+    burnTokens: false,
     ETHSupply: 0,
     tokenPriceETH: 0,
     tokenPriceDollar: 0,
@@ -302,6 +312,14 @@ export default {
     // Emit from TokenAddress Component
     nextStep: function (tokenAddress, currentStep) {
       this.tokenAddress = tokenAddress;
+    },
+    setBurnTokens: function () {
+      this.burnTokens = !this.burnTokens;
+      this.divideTokens = false;
+    },
+    setDivideTokens: function () {
+      this.divideTokens = !this.divideTokens;
+      this.burnTokens = false;
     }
   },
   watch: {
@@ -350,8 +368,17 @@ export default {
       deep: true
     },
     allocationsPercentage: {
-      handler() {
+      handler: function () {
         this.progression = this.preSalePercentage + this.liquidityPercentage + this.allocationsPercentage;
+      }
+    },
+    tokenPriceETH: {
+      handler: async function () {
+        if (this.tokenPriceETH > 0) {
+          await axios.get(process.env.VUE_APP_KRAKEN_API).then(response => {
+            this.tokenPriceDollar = (this.tokenPriceETH * Number(response.data.result.XETHZUSD.c[0]));
+          });
+        }
       }
     }
   }

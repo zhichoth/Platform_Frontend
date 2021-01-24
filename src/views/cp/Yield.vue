@@ -59,7 +59,7 @@ import PageTitle from '@/components/PageTitle'
 import YieldPool from '@/components/views/yield/YieldPool.Yield'
 
 export default {
-  name: 'yield.views',
+  name: 'yield.cp.views',
   components: {
     Search,
     Profile,

@@ -9,6 +9,9 @@
         <Footer class="block border-t-2 bg-gray-50 dark:bg-gray-800" />
       </div>
     </div>
+    <Cookie
+      v-if="showCookie"
+      @setCookie="setCookie" />
   </div>
 </template>
 
@@ -18,18 +21,34 @@
 import IsBusy from "@/components/is-busy/IsBusy.is-busy.vue";
 import Sidebar from '@/components/Sidebar'
 import Footer from '@/components/Footer';
+import Cookie from '@/components/Cookie'
 
 export default {
   name: 'app',
   components: {
     IsBusy,
     Sidebar,
-    Footer
+    Footer,
+    Cookie
   },
-  beforeMount: function() {
+  data: () => ({
+    showCookie: true,
+  }),
+  beforeMount: function () {
     this.$store.dispatch("initTheme");
   },
+  mounted: function () {
+    const cookie = localStorage.getItem('ysec.cookie');
+    if (cookie != undefined && cookie != null) {
+      this.showCookie = false;
+    }
+  },
   methods: {
+    setCookie: function () {
+      const date = new Date();
+      localStorage.setItem('ysec.cookie', `${date}`);
+      this.showCookie = false;
+    },
     toggleIsBusy: function (bool) {
       bool ? this.$refs.isBusy.isBusy() :  this.$refs.isBusy.isBusyStop();
     }

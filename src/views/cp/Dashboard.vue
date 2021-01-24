@@ -50,6 +50,7 @@
 <!--            v-if="showCreatePresaleModal" />-->
       </main>
     </transition>
+    <Cookie v-if="showCookie" />
   </div>
 </template>
 
@@ -68,7 +69,7 @@ import PreSalesTable from '@/components/views/dashboard/presale/tables/Presale.T
 // import CreatePreSaleModal from '@/components/modals/Presale.modals'
 
 export default {
-  name: 'dashboard.views',
+  name: 'dashboard.cp.views',
   components: {
     Search,
     Profile,
@@ -77,7 +78,7 @@ export default {
     PageTitle,
     PreSales,
     PreSalesTable,
-    // CreatePreSaleModal
+    // CreatePreSaleModal,
   },
   data: () => ({
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,

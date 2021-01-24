@@ -251,7 +251,7 @@ import PageTitle from '@/components/PageTitle'
 import TokenAddress from '@/components/presale/TokenAddress'
 
 export default {
-  name: 'presale.views',
+  name: 'presale.cp.views',
   components: {
     Search,
     Profile,

@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="#about">About</a> •
-  <a href="#license">License</a>
+  <a href="#pool">Pool</a>
 </p>
 
 ## About
@@ -22,13 +22,13 @@ In addition, we will have a YSEC – YSEC staking pool up, and there will be mor
 We also have a YSEC – ETH staking pool. We believe this is our most bullish tokenomic where tokenholders can grab a piece of the fees generated through developers using our platform.
 
 
-##Pool
-###YSEC – YSEC staking
+## Pool
+### YSEC – YSEC staking
 We are partnered with Ferrum Network for their farming / staking technology and are still discussing on how to optimize APY within these staking pools and in what ways we can make it most interesting for our tokenholders to participate.
 
 Within these pools participators stake their YSEC to earn a little more in return by the time they decide to withdraw. We currently (01-22-21) have a pool running with an APY of 60%. We will release more YSEC – YSEC staking pools in the future.
 
-###YSEC – ETH staking
+### YSEC – ETH staking
 The most interesting part of our platform for tokenholders, is the YSEC – ETH staking pool our platform will provide. A standard tokenomic within the pre-sales launching on our platform, will be a 5% base fee in ether raised. Half of this will be used to continue developing the platform. The other half however will be added to the dividend pool where YSEC stakers will be rewarded in ETH.
 
 To give an insight into what this might mean for YSEC tokenholders, we used the data from a platform we are aiming to be a direct competitor of: Bounce. Using the total amount of ETH that came through Bounce in the past few months, we can calculate the earnings our staking pool would divide if the YSEC platform is going to be used in the same frequency.

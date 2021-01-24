@@ -67,7 +67,7 @@
                         Total supply
                       </label>
                       <div class="mt-1 flex rounded-md">
-                        <input type="number" v-model="totalSupply" placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+                        <input type="number" v-model="totalSupply" placeholder="Total supply" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
                       </div>
                     </div>
                   </div>

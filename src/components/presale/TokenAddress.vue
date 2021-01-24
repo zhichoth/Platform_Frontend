@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
+      Presale is work in progress
+    </h1>
+    <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
       Token address
     </h1>
     <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">

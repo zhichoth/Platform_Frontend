@@ -45,6 +45,9 @@
 
         <PreSalesTable 
             :presales="presaleTable" />
+
+<!--        <CreatePreSaleModal-->
+<!--            v-if="showCreatePresaleModal" />-->
       </main>
     </transition>
   </div>
@@ -55,13 +58,14 @@ import axios from 'axios'
 
 // import metaMaskProvider from 'metamask-extension-provider'
 
-import Search from '@/components/search/Form'
+import Search from '@/components/search/Form.search'
 import Profile from '@/components/Profile'
-import AlertModal from '@/components/alerts/Modal'
+import AlertModal from '@/components/modals/Alert.modals'
 import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
 import PreSales from '@/components/views/dashboard/presale/Presale.Dashboard'
 import PreSalesTable from '@/components/views/dashboard/presale/tables/Presale.Table'
+// import CreatePreSaleModal from '@/components/modals/Presale.modals'
 
 export default {
   name: 'dashboard.views',
@@ -72,7 +76,8 @@ export default {
     Header,
     PageTitle,
     PreSales,
-    PreSalesTable
+    PreSalesTable,
+    // CreatePreSaleModal
   },
   data: () => ({
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
@@ -87,6 +92,7 @@ export default {
     presaleTable: [], // empty array
     showConnectionButton: false,
     showDownloadButton: false,
+    showCreatePresaleModal: true,
     alert: {
       title: '',
       msg: ''

@@ -11,7 +11,8 @@
 
 <p align="center">
   <a href="#about">About</a> •
-  <a href="#pool">Pool</a>
+  <a href="#pool">Pool</a> •
+  <a href="#presale">Presale</a>
 </p>
 
 ## About
@@ -39,7 +40,19 @@ Our dividend pool is a bullish tokenomic and is integrated to use our community 
 
 Because our community is rewarded for presales launched through YSEC, it will, in turn, make sure there will be a lot of exposure. Why? Because the more exposure, the more projects will launch trough YSEC and the more our tokenholders will earn.
 
+##presale
+At this moment there are no working platforms or solutions that do what we have built. 
+There are however parts of our services that are currently existing as standalone working projects.
+Such as bounce.finance which is a presale platform, and team.finance / unicrypt.network which are liquidity/asset locking solutions. 
 
+Developers have to connect with Unicrypt and TEAM to lock their assets and have to add the promised liquidity on Uniswap themselves. 
+They can decide to launch their presale through bounce, but since that platform is flooded with quick copies of your presale contract, 
+people end up depositing to the wrong adress and got scammed right off the bat. 
+
+YSEC will offer all of the functionalities mentioned above and by doing so we’ll become a one stop place to host your own presale, determine which funds/tokens will be locked and for how long + liquidity locking. 
+All this is done and decided on by the person instigating the presale. There will be no intervention from us, so no deciding if a project is allowed to start a presale. 
+This will help a lot of other projects that want to launch their own projects. By having it all under one roof, YSEC can ensure transparency and safety for investors using our platform. 
+In the beginning the developer decides on the tokenomics, in the end the investors decide whether or not it is to their liking.
 ---
 
 > [ysec.finance](https://www.ysec.finance) &nbsp;&middot;&nbsp;

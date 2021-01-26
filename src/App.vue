@@ -17,6 +17,7 @@
 
 <script>
 // import { mapGetters } from "vuex";
+import splitbee from '@splitbee/web';
 
 import IsBusy from "@/components/is-busy/IsBusy.is-busy.vue";
 import Sidebar from '@/components/Sidebar'
@@ -39,9 +40,17 @@ export default {
   },
   mounted: function () {
     const cookie = localStorage.getItem('ysec.cookie');
-    if (cookie != undefined && cookie != null) {
+    if (cookie !== undefined && cookie !== null) {
       this.showCookie = false;
     }
+
+    splitbee.init({
+      // Enable cookie-less mode. Defaults to `false`
+      disableCookie: false,
+
+      // Set custom urls when using proxying
+      scriptUrl: "https://cdn.splitbee.io/sb.js",
+    });
   },
   methods: {
     setCookie: function () {

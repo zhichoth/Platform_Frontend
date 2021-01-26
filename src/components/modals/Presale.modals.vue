@@ -59,12 +59,10 @@
 </template>
 
 <script>
-  // import Navigation from '@/components/navigation/Steps.navigation.vue'
 
   export default {
     name: 'modals.presale.components',
     components: {
-      // Navigation
     }
   };
 </script>

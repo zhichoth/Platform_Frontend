@@ -104,7 +104,6 @@ export default {
     await this.getPresalesTable();
   },
   mounted: async function () {
-
     if (this.provider === undefined) {
       this.isLoaded = true;
     }
@@ -176,14 +175,24 @@ export default {
       this.presaleTable = response.data;
     },
     handleAccountsChanged: function (accounts) {
-      if (accounts.length === 0) {
+      if (accounts === undefined || accounts !== null) {
+        // MetaMask is locked or the user has not connected any accounts
+        this.isConnected = false;
+        this.showError(
+            'No connections made',
+            'Click the connect button to connect your MetaMask account',
+            true);
+
+        return;
+      }
+       if (accounts.length === 0) {
         // MetaMask is locked or the user has not connected any accounts
         this.isConnected = false;
         this.showError(
           'No connections made',
           'Click the connect button to connect your MetaMask account',
           true);
-      } else {
+      } else
         this.$store.state.account = accounts[0];
         this.account = accounts[0];
         // show user that MetaMask is connected

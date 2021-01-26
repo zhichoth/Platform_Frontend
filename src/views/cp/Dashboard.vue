@@ -175,14 +175,8 @@ export default {
       this.presaleTable = response.data;
     },
     handleAccountsChanged: function (accounts) {
-      if (accounts === undefined || accounts !== null) {
-        // MetaMask is locked or the user has not connected any accounts
+      if (accounts === null) {
         this.isConnected = false;
-        this.showError(
-            'No connections made',
-            'Click the connect button to connect your MetaMask account',
-            true);
-
         return;
       }
        if (accounts.length === 0) {

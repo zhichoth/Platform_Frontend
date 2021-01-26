@@ -51,15 +51,15 @@
 import axios from 'axios'
 import Web3 from 'web3'
 
-import Search from '@/components/search/Form'
+import Search from '@/components/search/Form.search'
 import Profile from '@/components/Profile'
-import AlertModal from '@/components/alerts/Modal'
+import AlertModal from '@/components/modals/Alert.modals'
 import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
 import YieldPool from '@/components/views/yield/YieldPool.Yield'
 
 export default {
-  name: 'yield.views',
+  name: 'yield.cp.views',
   components: {
     Search,
     Profile,
@@ -140,7 +140,7 @@ export default {
   },
   mounted: async function () {
     // IsBusy
-    this.$emit('toggleIsBusy', true);
+    // this.$emit('toggleIsBusy', true);
 
     if (this.account === '') {
       // Detect provider
@@ -153,7 +153,7 @@ export default {
     this.isLoaded = true;
 
     // IsBusy
-    this.$emit('toggleIsBusy', false);
+    // this.$emit('toggleIsBusy', false);
   },
   methods: {
     detectProvider: async function () {

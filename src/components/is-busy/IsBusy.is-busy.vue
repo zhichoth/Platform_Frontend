@@ -12,7 +12,7 @@ import lottie from 'lottie-web';
 import animation from '@/assets/lottie/loading-animation.json';
 
 export default {
-    name: 'IsBusy.components',
+    name: 'is-busy.IsBusy.components',
     methods: {
       isBusy: function () {
         return (this.anim = lottie.loadAnimation({

@@ -74,7 +74,7 @@
 
 <script>
 export default {
-  name: 'alerts.modal.components',
+  name: 'modals.alert.components',
   props: {
     alert: Object,
     showConnectionButton: Boolean,

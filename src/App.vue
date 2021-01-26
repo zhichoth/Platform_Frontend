@@ -16,10 +16,8 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import splitbee from '@splitbee/web';
 
-import IsBusy from "@/components/is-busy/IsBusy.is-busy.vue";
 import Sidebar from '@/components/Sidebar'
 import Footer from '@/components/Footer';
 import Cookie from '@/components/Cookie'
@@ -27,7 +25,6 @@ import Cookie from '@/components/Cookie'
 export default {
   name: 'app',
   components: {
-    IsBusy,
     Sidebar,
     Footer,
     Cookie
@@ -59,7 +56,7 @@ export default {
       this.showCookie = false;
     },
     toggleIsBusy: function (bool) {
-      bool ? this.$refs.isBusy.isBusy() :  this.$refs.isBusy.isBusyStop();
+      // bool ? this.$refs.isBusy.isBusy() :  this.$refs.isBusy.isBusyStop();
     }
   }
 }

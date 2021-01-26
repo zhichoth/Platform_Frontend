@@ -192,7 +192,7 @@ export default {
           'No connections made',
           'Click the connect button to connect your MetaMask account',
           true);
-      } else
+      } else {
         this.$store.state.account = accounts[0];
         this.account = accounts[0];
         // show user that MetaMask is connected

@@ -29,7 +29,6 @@
 
       </main>
     </transition>
-    <Cookie v-if="showCookie" />
   </div>
 </template>
 

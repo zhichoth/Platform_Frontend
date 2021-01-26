@@ -16,7 +16,7 @@
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                 </svg>
               </div>
-              <input type="text" name="search_candidate" id="search_candidate" class="focus:border-blue-500 active:border-blue-500 block w-full rounded pl-10 pb-1 pt-1 border-gray-300 dark:bg-gray-800 dark:focus:border-blue-500" placeholder="Search">
+              <input type="text" name="search_candidate" id="search_candidate" class="focus:border-blue-500 active:border-blue-500 block w-full rounded pl-10 pb-1 pt-1 border-gray-300 dark:bg-gray-800 dark:focus:border-blue-500 text-white" placeholder="Search">
             </div>
           </div>
         </div>

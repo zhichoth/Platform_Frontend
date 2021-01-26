@@ -1,6 +1,5 @@
 <template>
   <div id="app" class="h-full dark:bg-gray-900">
-    <IsBusy ref="isBusy" />
     <div class="flex bg-white dark:bg-gray-900">
       <Sidebar />
       <!-- Main column -->

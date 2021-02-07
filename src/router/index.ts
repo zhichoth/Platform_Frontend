@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Dashboard from '../views/cp/Dashboard.vue'
 import Yield from '../views/cp/Yield.vue'
 import Presale from '../views/cp/Presale.vue'
+import PresaleDetail from '../views/cp/Presale.detail.vue'
 import Privacy from '../views/Privacy-policy.vue'
 
 Vue.use(VueRouter)
@@ -22,6 +23,11 @@ const routes: Array<RouteConfig> = [
     path: '/presale/create',
     name: 'presale.create',
     component: Presale
+  },
+  {
+    path: '/presale/show-:name',
+    name: 'presale.show',
+    component: PresaleDetail
   },
   {
     path: '/privacy-policy',

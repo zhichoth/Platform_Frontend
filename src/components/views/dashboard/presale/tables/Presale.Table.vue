@@ -101,7 +101,7 @@
                 </td>
                 <td class="px-6 py-3 text-sm font-medium">
                   <div class="flex items-center space-x-3">
-                      <button class="bg-yellow-500 rounded pl-3 pr-3 pt-2 pb-2 text-white">View</button>
+                      <button v-on:click="showPresale(presale)" class="bg-yellow-500 rounded pl-3 pr-3 pt-2 pb-2 text-white">View</button>
                   </div>
                 </td>
               </tr>
@@ -109,14 +109,28 @@
           </table>
         </div>
       </div>
+<!--      <PresaleModal-->
+<!--          v-if="showModal"-->
+<!--          :presale="presale"-->
+<!--      />-->
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'presale.table.presale.dashboard.views.components',
   props: { 
     presales: Array
+  },
+  data: () => ({
+    presale: {},
+  }),
+  methods: {
+    showPresale: function (presale) {
+      this.$store.state.presale = presale;
+      this.$router.push({ name: 'presale.show', params: {name: presale.name} });
+    }
   }
 }
 </script>

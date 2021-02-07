@@ -186,7 +186,7 @@ export default {
       const contract = {
         abi: result,
         address: process.env.VUE_APP_CONTRACT_ADDRESS,
-        endpoint: `https://api.etherscan.io/api?module=contract&action=getabi&address=${process.env.VUE_APP_CONTRACT_ADDRESS}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`,
+        endpoint: `https://api.etherscan.io/api?module=contract&action=getabi&address=${process.env.VUE_APP_STAKE_CONTRACT}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`,
       };
 
       const contractInterface = new web3.eth.Contract(contract.abi)
@@ -198,10 +198,14 @@ export default {
       this.getEstReward();
     },
     getTotalYsecStaked: async function (contractInterface) {
-      this.yieldPool.totalYsecStaked = await contractInterface.methods.stakedBalance().call();
+      console.log(contractInterface.methods)
+      // this.yieldPool.totalYsecStaked = await contractInterface.methods.stakedBalance().call();
+      // this.yieldPool.totalYsecStaked = await contractInterface.methods.stakedTotal().call();
+      this.yieldPool.totalYsecStaked = await contractInterface.methods.totalSupply().call();
     },
     getAccountYsecStaked: async function (contractInterface) {
-      this.yieldPool.accountYsecStaked = await contractInterface.methods.stakeOf(process.env.VUE_APP_STAKE_ADDRESS).call();
+      // this.yieldPool.accountYsecStaked = await contractInterface.methods.stakeOf(process.env.VUE_APP_STAKE_ADDRESS).call();
+      this.yieldPool.accountYsecStaked = await contractInterface.methods.stakeOf(this.account).call();
     },
     getEthInPool: async function (contractInterface) {
       this.yieldPool.ETHPool = await contractInterface.methods.rewardBalance().call();

@@ -32,69 +32,66 @@
             </thead>
             <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-100">
               <tr v-for="(presale, key) in presales" :key="key">
-                <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                <td class="px-6 py-3 text-sm  font-medium text-gray-900 dark:text-gray-300">
                   <div class="flex space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
                         {{ presale.name }}
                         <br>
-                        <span class="text-yellow-500 font-normal">
-                          {{ presale.subname }}
-                        </span>
                       </span>
                     </a>
                   </div>
                 </td>
                 <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="flex space-x-3">
+                  <div class="space-x-3 text-center">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.liquidity }}
+                        {{ presale.liquidity_locked }}%
                       </span>
                     </a>
                   </div>
                 </td>
                 <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="flex items-center space-x-3">
+                  <div class="text-center space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.tokensLocked }}
+                        {{ presale.tokens_locked }} {{ presale.name }}
                       </span>
                     </a>
                   </div>
                 </td>
                 <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="flex items-center space-x-3 lg:pl-2">
+                  <div class="text-center space-x-3 lg:pl-2">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.coinPrice }}
+                        ${{ presale.token_price }}
                       </span>
                     </a>
                   </div>
                 </td>
                 <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="flex items-center space-x-3">
+                  <div class="text-center items-center space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.valueLocked }}
+                        ${{ presale.value_locked }}
                       </span>
                     </a>
                   </div>
                 </td>
                 <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="flex items-center space-x-3">
+                  <div class="text-center items-center space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.softcap }}
+                        {{ presale.softcap }} ETH
                       </span>
                     </a>
                   </div>
                 </td>
                 <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="flex items-center space-x-3">
+                  <div class="text-center items-center space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                       {{ presale.hardcap }}
+                       {{ presale.hardcap }} ETH
                       </span>
                     </a>
                   </div>

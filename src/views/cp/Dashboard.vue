@@ -169,11 +169,11 @@ export default {
       }
     },
     getPresalesTable: async function () {
-      const response = await axios.get("/assets/data/table.json");
+      const response = await axios.get(`${process.env.VUE_APP_SERVICE}/api/v1/presales`);
       if (response.status !== 200)
         return this.showError(response);
 
-      this.presaleTable = response.data; //[];
+      this.presaleTable = response.data.presales; //[];
     },
     handleAccountsChanged: function (accounts) {
       if (accounts.length === 0) {

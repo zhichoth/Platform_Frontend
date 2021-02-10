@@ -24,16 +24,17 @@
             <div>
               <h1>
                 <span class="block text-2xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
-                  {{ presale.Name }}
+                  {{ presale.name }}
                 </span>
                 <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">
-                  {{ presale.StartDate }}
+                  {{ presale.start_date }}
                 </span>
               </h1>
             </div>
             <div class="col-span-3">
               <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">
-                {{ presale.name }} token address: {{ presale.Addresses[0] }}
+                {{ presale.name }} token address:
+                <a :href="`https://etherscan.io/address/${presale.token_address}`" target="_blank" class="text-blue-500 hover:text-yellow-600 transiation duration-300">{{ presale.token_address }}</a>
               </span>
             </div>
           </div>
@@ -78,25 +79,25 @@
                     <div class="grid gap-1 mt-3">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Liquiditiy locked:</span>
-                        <a href="#" class="text-blue-500">{{ presale.TokenLiqAmount }}%</a>
+                        <a href="#" class="text-blue-500">{{ presale.liquidity_locked }}%</a>
                       </div>
                     </div>
                     <div class="grid gap-1 mt-1">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Tokens locked:</span>
-                        <a href="#" class="text-blue-500">125,000.0000 {{ presale.name }}</a>
+                        <a href="#" class="text-blue-500">{{ presale.tokens_locked }} {{ presale.name }}</a>
                       </div>
                     </div>
                     <div class="grid gap-1 mt-1">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Token price:</span>
-                        <a href="#" class="text-blue-500">$0.02</a>
+                        <a href="#" class="text-blue-500">${{ presale.token_price }}</a>
                       </div>
                     </div>
                     <div class="grid gap-1 mt-1">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Total tokens:</span>
-                        <a href="#" class="text-blue-500">{{ presale.TokenPresaleAllocation }}</a>
+                        <a href="#" class="text-blue-500">{{ presale.total_supply }}</a>
                       </div>
                     </div>
                   </div>
@@ -109,14 +110,14 @@
                     <div class="grid gap-1 mt-3">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Hardcap:</span>
-                        <a href="#" class="text-blue-500">{{ presale.Hardcap }}</a>
+                        <a href="#" class="text-blue-500">{{ presale.hardcap }}</a>
                         <span class="text-yellow-500 pl-2">ETH</span>
                       </div>
                     </div>
                     <div class="grid gap-1 mt-1">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Softcap:</span>
-                        <a href="#" class="text-blue-500">{{ presale.Softcap }}</a>
+                        <a href="#" class="text-blue-500">{{ presale.softcap }}</a>
                         <span class="text-yellow-500 pl-2">ETH</span>
                       </div>
                     </div>
@@ -138,7 +139,7 @@
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Estimated return:</span>
                         <a href="#" class="text-blue-500">375.000</a>
-                        <span class="text-yellow-500 pl-2">{{ presale.Name }}</span>
+                        <span class="text-yellow-500 pl-2">{{ presale.name }}</span>
                       </div>
                     </div>
                   </div>
@@ -167,47 +168,10 @@
           <div class="block mt-8">
             <span class="block text-1xl leading-8 font-medium tracking-tight text-gray-900 dark:text-white sm:text-1xl">Presale information</span>
             <div class="grid grid-cols-4 gap-5 mt-3">
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
-              </div>
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
-              </div>
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
-              </div>
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
-              </div>
-            </div>
-            <div class="grid grid-cols-4 gap-5 mt-5">
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
-              </div>
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
-              </div>
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
-              </div>
-              <div class="col-span-1">
-                <span class="text-gray-900 dark:text-white pr-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deleniti:</span>
-                <a href="#" class="text-blue-500">0x00000</a>
-                <span class="block text-gray-400">Receives 10% every month for a total of 10 months</span>
+              <div class="col-span-2">
+                <span class="text-gray-900 dark:text-white pr-1">
+                  {{ presale.description }}
+                </span>
               </div>
             </div>
           </div>
@@ -243,6 +207,7 @@ export default {
     return {
       id: this.$route.params.id,
       presale: {},
+      contractPresale: {},
       contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
       isConnected: false,
       showAlert: false,
@@ -302,6 +267,7 @@ export default {
     // this.title = `Presale ${this.presale.name}`;
 
     await this.getPresaleData();
+    await this.queryPresaleData();
     await this.getPresalesTokens();
     await this.getPresalesGraph();
     this.isLoaded = true;
@@ -319,9 +285,14 @@ export default {
       const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
       presaleContractInterface.options.address = process.env.VUE_APP_PRESALE_CONTRACT;
 
-      this.presale = await presaleContractInterface.methods.Presales(this.id).call();
+      this.contractPresale = await presaleContractInterface.methods.Presales(this.id).call();
+    },
+    queryPresaleData: async function () {
+      const response = await axios.get(`${process.env.VUE_APP_SERVICE}/api/v1/presale/${this.id}`);
+      if (response.status !== 200)
+        return this.showError(response);
 
-      console.log(this.presale);
+      this.presale = response.data.presale;
     },
     getPresalesTokens: async function () {
       const response = await axios.get(`/assets/data/token-allocation.json`);

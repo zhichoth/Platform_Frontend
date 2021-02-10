@@ -24,7 +24,7 @@
             :chartData="chartData"
             :options="options" />
 
-        <PreSalesTable 
+        <PreSalesTable
             :presales="presaleTable" />
 
       </main>
@@ -173,7 +173,7 @@ export default {
       if (response.status !== 200)
         return this.showError(response);
 
-      this.presaleTable = response.data;
+      this.presaleTable = response.data; //[];
     },
     handleAccountsChanged: function (accounts) {
       if (accounts.length === 0) {

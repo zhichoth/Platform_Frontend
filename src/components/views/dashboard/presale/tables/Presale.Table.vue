@@ -2,7 +2,7 @@
   <div id="presale--table">
     <div class="hidden mt-8 sm:block pt-4 px-4 sm:px-6 lg:px-8">
       <h2 class="text-gray-500 text-xs font-medium uppercase tracking-wide">Presale list</h2>
-        <div class="align-middle inline-block min-w-full mt-3 border-b border-l border-r border-gray-200">
+        <div v-if="presales.length > 0" class="align-middle inline-block min-w-full mt-3 border-b border-l border-r border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr class="border-t border-gray-200">
@@ -108,11 +108,8 @@
             </tbody>
           </table>
         </div>
+      <img class="w-1/3 mx-auto mt-10" v-if="presales.length <= 0" src="/assets/images/empty-state.svg" />
       </div>
-<!--      <PresaleModal-->
-<!--          v-if="showModal"-->
-<!--          :presale="presale"-->
-<!--      />-->
   </div>
 </template>
 

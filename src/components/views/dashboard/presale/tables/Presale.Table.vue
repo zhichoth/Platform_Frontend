@@ -28,6 +28,7 @@
                   Hardcap
                 </th>
                 <th class="pr-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-right text-xs font-medium text-gray-400 uppercase tracking-wider"></th>
+                <th class="pr-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-right text-xs font-medium text-gray-400 uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-100">
@@ -36,7 +37,11 @@
                   <div class="flex space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.name }}
+                        {{ presale.company_name }}
+                        <br>
+                      </span>
+                      <span class="text-yellow-500">
+                        {{ presale.token_name }}
                         <br>
                       </span>
                     </a>
@@ -101,6 +106,11 @@
                       <button v-on:click="showPresale(presale)" class="bg-yellow-500 rounded pl-3 pr-3 pt-2 pb-2 text-white">View</button>
                   </div>
                 </td>
+                <td class="px-6 py-3 text-sm font-medium">
+                  <div class="flex items-center space-x-3">
+                    <button v-on:click="pinPresale(presale)" class="bg-purple-800 rounded pl-3 pr-3 pt-2 pb-2 text-white">Pin</button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -124,6 +134,9 @@ export default {
     showPresale: function (presale) {
       this.$store.state.presale = presale;
       this.$router.push({ name: 'presale.show', params: {id: presale.id} });
+    },
+    pinPresale: function (presale) {
+      this.$emit('pinPresale', presale);
     }
   }
 }

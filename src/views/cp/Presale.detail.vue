@@ -24,7 +24,10 @@
             <div>
               <h1>
                 <span class="block text-2xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
-                  {{ presale.name }}
+                  {{ presale.token_name }}
+                </span>
+                <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">
+                  {{ presale.company_name }}
                 </span>
                 <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">
                   {{ presale.start_date }}
@@ -46,29 +49,32 @@
               <span class="block text-1xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-1xl">TEAM Information</span>
               <div class="block">
                 <span class="block text-1xl leading-8 font-medium tracking-tight text-gray-900 dark:text-white sm:text-1xl">Socials</span>
-                <div class="grid  mt-3">
-                  <div class="flex">
+                <div class="grid mt-3" v-for="(social, key) in presale.socials" :key="key">
+                  <div class="flex" v-if="Number(social.type) === 0">
+                    <svg class="w-6 h-6 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                    <span class="text-gray-900 dark:text-white pl-3 pr-3">Website: </span>
+                    <a :href="social.url" class="text-blue-500">{{ social.url }}</a>
+                  </div>
+                  <div class="flex" v-else-if="Number(social.type) === 1">
                     <svg class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path fill-rule="evenodd" d="m.415 11.196 5.869 2.925c.227.112.495.104.712-.023l5.224-3.037-3.162 2.802c-.161.143-.253.347-.253.562v6.825c0 .72.919 1.023 1.35.451l2.537-3.373 6.274 3.573c.44.253 1.004-.001 1.106-.504l3.913-19.5c.117-.586-.466-1.064-1.008-.846l-22.5 8.775c-.604.236-.643 1.081-.062 1.37zm21.83-8.249-3.439 17.137-5.945-3.386c-.324-.185-.741-.103-.971.201l-1.585 2.107v-4.244l8.551-7.576c.677-.599-.101-1.664-.874-1.21l-11.39 6.622-3.992-1.989z" clip-rule="evenodd" />
                     </svg>
                     <span class="text-gray-900 dark:text-white pl-3 pr-3">Telegram: </span>
-                    <a href="#" class="text-blue-500">t.me/teamlink</a>
+                    <a :href="social.url" class="text-blue-500">{{ social.url }}</a>
                   </div>
-                </div>
-                <div class="grid mt-3">
-                  <div class="flex">
+                  <div class="flex" v-else-if="Number(social.type) === 2">
                     <svg class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                     </svg>
                     <span class="text-gray-900 dark:text-white pl-3 pr-3">Twitter: </span>
-                    <a href="#" class="text-blue-500">t.me/teamlink</a>
+                    <a :href="social.url" class="text-blue-500">{{ social.url }}</a>
                   </div>
-                </div>
-                <div class="grid mt-3">
-                  <div class="flex">
-                    <svg class="w-6 h-6 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                    <span class="text-gray-900 dark:text-white pl-3 pr-3">Website: </span>
-                    <a href="#" class="text-blue-500">t.me/teamlink</a>
+                  <div class="flex" v-else-if="Number(social.type) === 3">
+                    <svg class="h-6 w-6 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-gray-900 dark:text-white pl-3 pr-3">Github: </span>
+                    <a :href="social.url" class="text-blue-500">{{ social.url }}</a>
                   </div>
                 </div>
               </div>
@@ -150,11 +156,11 @@
               <div class="grid grid-cols-3 gap-4">
                 <div>
                   <span class="block text-1xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-1xl">Token allocation</span>
-                  <div v-for="(token, key) in tokenAllocations" :key="key">
+                  <div v-for="(token, key) in presale.tokens" :key="key">
                     <div class="grid grid-cols-1 gap-1 mt-3">
                       <div class="flex">
                         <span class="text-yellow-600 w-1/5">{{ token.liquidity }}%</span>
-                        <span class="text-gray-900 dark:text-white">{{ token.title  }}</span>
+                        <span class="text-gray-900 dark:text-white">{{ token.name  }}</span>
                       </div>
                     </div>
                   </div>
@@ -262,13 +268,8 @@ export default {
     }
   },
   mounted: async function () {
-    // TODO Local data remove later
-    // this.presale = this.$store.getters.presale;
-    // this.title = `Presale ${this.presale.name}`;
-
     await this.getPresaleData();
     await this.queryPresaleData();
-    await this.getPresalesTokens();
     await this.getPresalesGraph();
     this.isLoaded = true;
   },
@@ -294,28 +295,10 @@ export default {
 
       this.presale = response.data.presale;
     },
-    getPresalesTokens: async function () {
-      const response = await axios.get(`/assets/data/token-allocation.json`);
-      if (response.status !== 200)
-        return this.showError(response.config.url, response.status);
-
-      this.tokenAllocations = response.data;
-    },
     getPresalesGraph: async function () {
-      const response = await axios.get(`/assets/data/chart.json`);
-      if (response.status !== 200)
-        return this.showError(response.config.url, response.status);
-
-      const preSales = response.data;
-      this.presalesChart = preSales;
-
-      if (preSales && preSales.length > 0) {
-        for (let index = 0; index < preSales.length; index++) {
-          this.chartData.datasets[0].data.push(preSales[index].uniswap);
-          this.chartData.datasets[0].data.push(preSales[index].marketing);
-          this.chartData.datasets[0].data.push(preSales[index].team);
-          this.chartData.datasets[0].data.push(preSales[index].farming);
-          this.chartData.datasets[0].data.push(preSales[index].presale);
+      if (this.presale.tokens && this.presale.tokens.length > 0) {
+        for (let index = 0; index < this.presale.tokens.length; index++) {
+          this.chartData.datasets[0].data.push(Number(this.presale.tokens[index].liquidity));
         }
       }
     },
@@ -333,3 +316,12 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.icon {
+  svg {
+    path {
+      color: #FFF;
+    }
+  }
+}
+</style>

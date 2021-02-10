@@ -25,7 +25,9 @@
             :options="options" />
 
         <PreSalesTable
-            :presales="presaleTable" />
+            :presales="presaleTable"
+            @pinPresale="pinPresale"
+        />
 
       </main>
     </transition>
@@ -119,36 +121,6 @@ export default {
     }
   },
   methods: {
-    detectProvider: async function () {
-      // Great change MetaMask is not installed
-      if (this.provider === undefined) {
-        return this.showError(
-          'MetaMask is not installed.', 
-          'It looks like the connection to the MetaMask wallet failed. Try connecting again.',
-          false,
-          true);
-      }
-
-      if (!this.provider.isMetaMask)
-        return this.showError(
-          'MetaMask connection failed.', 
-          'It looks like the connection to the MetaMask wallet failed. Try connecting again.');
-    },
-    currentAccount: async function () {
-      // connect to MetaMask account
-      this.chainId = this.provider.chainId;
-      this.provider
-        .request({ method: 'eth_accounts' })
-        .then(this.handleAccountsChanged(this.provider._state.accounts))
-        .catch((err) => {
-          // Some unexpected error.
-          // For backwards compatibility reasons, if no accounts are available,
-          // eth_accounts will return an empty array.
-          this.showError(
-            'Unexpected error',
-            err);
-        });
-    },
     getPresalesGraph: async function () {
       const response = await axios.get(`/assets/data/chart.json`);
       
@@ -174,6 +146,49 @@ export default {
         return this.showError(response);
 
       this.presaleTable = response.data.presales; //[];
+    },
+    pinPresale: function (presale) {
+      const pinnedPresales = localStorage.getItem('pinnedPresales');
+
+      if (pinnedPresales === null) {
+        this.$store.state.pinnedPresales.push(presale.id);
+        localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
+      }
+
+      this.setPinnedPresale();
+    },
+    setPinnedPresale: function () {
+      // TODO Implement
+    },
+    detectProvider: async function () {
+      // Great change MetaMask is not installed
+      if (this.provider === undefined) {
+        return this.showError(
+            'MetaMask is not installed.',
+            'It looks like the connection to the MetaMask wallet failed. Try connecting again.',
+            false,
+            true);
+      }
+
+      if (!this.provider.isMetaMask)
+        return this.showError(
+            'MetaMask connection failed.',
+            'It looks like the connection to the MetaMask wallet failed. Try connecting again.');
+    },
+    currentAccount: async function () {
+      // connect to MetaMask account
+      this.chainId = this.provider.chainId;
+      this.provider
+          .request({ method: 'eth_accounts' })
+          .then(this.handleAccountsChanged(this.provider._state.accounts))
+          .catch((err) => {
+            // Some unexpected error.
+            // For backwards compatibility reasons, if no accounts are available,
+            // eth_accounts will return an empty array.
+            this.showError(
+                'Unexpected error',
+                err);
+          });
     },
     handleAccountsChanged: function (accounts) {
       if (accounts.length === 0) {

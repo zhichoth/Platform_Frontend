@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
     component: Presale
   },
   {
-    path: '/presale/show-:name',
+    path: '/presale/:id',
     name: 'presale.show',
     component: PresaleDetail
   },

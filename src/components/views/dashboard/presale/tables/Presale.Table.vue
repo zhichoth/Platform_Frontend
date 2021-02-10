@@ -129,7 +129,7 @@ export default {
   methods: {
     showPresale: function (presale) {
       this.$store.state.presale = presale;
-      this.$router.push({ name: 'presale.show', params: {name: presale.name} });
+      this.$router.push({ name: 'presale.show', params: {id: presale.id} });
     }
   }
 }

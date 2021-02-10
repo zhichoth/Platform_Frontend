@@ -23,12 +23,18 @@
           <div class="grid grid-cols-4 gap-4">
             <div>
               <h1>
-                <span class="block text-2xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-2xl">{{ presale.subname }}</span>
-                <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">{{ presale.name }}</span>
+                <span class="block text-2xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
+                  {{ presale.Name }}
+                </span>
+                <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">
+                  {{ presale.StartDate }}
+                </span>
               </h1>
             </div>
             <div class="col-span-3">
-              <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">{{ presale.name }} token address: 0x</span>
+              <span class="block text-base text-gray-900 dark:text-white font-semibold tracking-wide uppercase">
+                {{ presale.name }} token address: {{ presale.Addresses[0] }}
+              </span>
             </div>
           </div>
         </div>
@@ -72,7 +78,7 @@
                     <div class="grid gap-1 mt-3">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Liquiditiy locked:</span>
-                        <a href="#" class="text-blue-500">75%</a>
+                        <a href="#" class="text-blue-500">{{ presale.TokenLiqAmount }}%</a>
                       </div>
                     </div>
                     <div class="grid gap-1 mt-1">
@@ -90,7 +96,7 @@
                     <div class="grid gap-1 mt-1">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Total tokens:</span>
-                        <a href="#" class="text-blue-500">1,000.000</a>
+                        <a href="#" class="text-blue-500">{{ presale.TokenPresaleAllocation }}</a>
                       </div>
                     </div>
                   </div>
@@ -103,14 +109,14 @@
                     <div class="grid gap-1 mt-3">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Hardcap:</span>
-                        <a href="#" class="text-blue-500">2,500.000</a>
+                        <a href="#" class="text-blue-500">{{ presale.Hardcap }}</a>
                         <span class="text-yellow-500 pl-2">ETH</span>
                       </div>
                     </div>
                     <div class="grid gap-1 mt-1">
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Softcap:</span>
-                        <a href="#" class="text-blue-500">500.000</a>
+                        <a href="#" class="text-blue-500">{{ presale.Softcap }}</a>
                         <span class="text-yellow-500 pl-2">ETH</span>
                       </div>
                     </div>
@@ -132,7 +138,7 @@
                       <div class="flex">
                         <span class="text-gray-900 dark:text-white pr-5">Estimated return:</span>
                         <a href="#" class="text-blue-500">375.000</a>
-                        <span class="text-yellow-500 pl-2">{{ presale.name }}</span>
+                        <span class="text-yellow-500 pl-2">{{ presale.Name }}</span>
                       </div>
                     </div>
                   </div>
@@ -223,6 +229,7 @@ import PageTitle from '@/components/PageTitle'
 
 import Chart from '@/components/views/dashboard/presale/charts/Presale.Chart'
 import axios from "axios";
+import Web3 from "web3";
 
 export default {
   name: "presale.detail.cp.views",
@@ -232,53 +239,56 @@ export default {
     PageTitle,
     Chart
   },
-  data: () => ({
-    presale: {},
-    contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
-    isConnected: false,
-    showAlert: false,
-    isLoaded: false,
-    title: 'Presale',
-    account: '',
-    provider: window.ethereum,
-    chainId: null,
-    showAddAllocationButton: true,
-    presalesChart: [],
-    tokenAllocations: [],
-    alert: {
-      title: '',
-      msg: ''
-    },
-    chartData: {
-      labels: [
-        'Uniswap Liquidity',
-        'Marketing',
-        'Team',
-        'Farming',
-        'PreSale'],
-      datasets: [
-        {
-          label: 'Label',
-          backgroundColor: [
-            '#db7d02',
-            '#f78c00',
-            '#f49d2c',
-            '#f2a541',
-            '#f9af4d',
-            '#f9b761'],
-          data: []
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      legend: {
-        display: false,
-        position: 'left',
+  data() {
+    return {
+      id: this.$route.params.id,
+      presale: {},
+      contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
+      isConnected: false,
+      showAlert: false,
+      isLoaded: false,
+      title: 'Presale',
+      account: '',
+      provider: window.ethereum,
+      chainId: null,
+      showAddAllocationButton: true,
+      presalesChart: [],
+      tokenAllocations: [],
+      alert: {
+        title: '',
+        msg: ''
       },
-      maintainAspectRatio: false
-    },
-  }),
+      chartData: {
+        labels: [
+          'Uniswap Liquidity',
+          'Marketing',
+          'Team',
+          'Farming',
+          'PreSale'],
+        datasets: [
+          {
+            label: 'Label',
+            backgroundColor: [
+              '#db7d02',
+              '#f78c00',
+              '#f49d2c',
+              '#f2a541',
+              '#f9af4d',
+              '#f9b761'],
+            data: []
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          display: false,
+          position: 'left',
+        },
+        maintainAspectRatio: false
+      },
+    }
+  },
   beforeMount: async function() {
     if (this.$store.getters.account !== '') {
       this.account = this.$store.getters.account;
@@ -287,14 +297,32 @@ export default {
     }
   },
   mounted: async function () {
-    this.presale = this.$store.getters.presale;
-    this.title = `Presale ${this.presale.name}`;
+    // TODO Local data remove later
+    // this.presale = this.$store.getters.presale;
+    // this.title = `Presale ${this.presale.name}`;
 
+    await this.getPresaleData();
     await this.getPresalesTokens();
     await this.getPresalesGraph();
     this.isLoaded = true;
   },
   methods: {
+    getPresaleData: async function () {
+      const response = await axios.get(process.env.VUE_APP_PRESALE_CONTRACT_URL);
+
+      if (response.status !== 200)
+        return this.showError(response);
+
+      const presaleContractAbi = response.data.abi;
+      const web3 = new Web3(this.provider); // TODO Remove later "http://127.0.0.1:7545"
+
+      const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
+      presaleContractInterface.options.address = process.env.VUE_APP_PRESALE_CONTRACT;
+
+      this.presale = await presaleContractInterface.methods.Presales(this.id).call();
+
+      console.log(this.presale);
+    },
     getPresalesTokens: async function () {
       const response = await axios.get(`/assets/data/token-allocation.json`);
       if (response.status !== 200)

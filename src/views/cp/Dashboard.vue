@@ -40,6 +40,7 @@ import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
 import PreSales from '@/components/views/dashboard/presale/Presale.Dashboard'
 import PreSalesTable from '@/components/views/dashboard/presale/tables/Presale.Table'
+import Web3 from "web3";
 
 export default {
   name: 'dashboard.cp.views',
@@ -168,12 +169,19 @@ export default {
       }
     },
     getPresalesTable: async function () {
-      const response = await axios.get(`/assets/data/table.json`);
-      
+      const response = await axios.get(process.env.VUE_APP_PRESALE_CONTRACT_URL);
+
       if (response.status !== 200)
         return this.showError(response);
 
-      this.presaleTable = response.data;
+      const presaleContractAbi = response.data.abi;
+      const web3 = new Web3(this.provider); //"http://127.0.0.1:7545"
+
+      const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
+      presaleContractInterface.options.address = process.env.VUE_APP_PRESALE_CONTRACT;
+      const presales = await presaleContractInterface.methods.Presales(1).call();
+      console.log(presales)
+      // this.presaleTable = response.data;
     },
     handleAccountsChanged: function (accounts) {
       if (accounts.length === 0) {

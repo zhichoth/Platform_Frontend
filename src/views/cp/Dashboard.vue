@@ -20,12 +20,12 @@
             :title="title" />
         
         <PreSales 
-            :presales="presalesChart"
+            :presales="pinnedPresales"
             :chartData="chartData"
             :options="options" />
 
         <PreSalesTable
-            :presales="presaleTable"
+            :presales="presales"
             @pinPresale="pinPresale"
         />
 
@@ -62,8 +62,9 @@ export default {
     account: '',
     provider: window.ethereum,
     chainId: null,
+    pinnedPresales: [],
     presalesChart: [], // empty array
-    presaleTable: [], // empty array
+    presales: [], // empty array
     showConnectionButton: false,
     showDownloadButton: false,
     showCreatePresaleModal: true,
@@ -104,7 +105,8 @@ export default {
   beforeMount: async function () {
     // Get Presales
     await this.getPresalesGraph();
-    await this.getPresalesTable();
+    await this.getPresales();
+    await this.setPinnedPresales();
   },
   mounted: async function () {
 
@@ -140,25 +142,75 @@ export default {
         }
       }
     },
-    getPresalesTable: async function () {
+    getPresales: async function () {
       const response = await axios.get(`${process.env.VUE_APP_SERVICE}/api/v1/presales`);
       if (response.status !== 200)
         return this.showError(response);
 
-      this.presaleTable = response.data.presales; //[];
+      this.presales = response.data.presales;
+    },
+    setPinnedPresales: async function () {
+      let pinnedPresales = localStorage.getItem('pinnedPresales');
+      if (!pinnedPresales) return;
+
+      pinnedPresales = JSON.parse(pinnedPresales);
+      this.pinnedPresales = [];
+      for (let i = 0; i < pinnedPresales.length; i++) {
+        const presale = this.presales.find(presale => presale.id === pinnedPresales[i].id);
+
+        if (presale) {
+          for (let i = 0; i < this.presales.length; i++) {
+            const presale = this.presales[i];
+            console.log(presale.tokens)
+            if (presale.token && presale.tokens.length > 0) {
+              console.log(presale)
+              for (let index = 0; index < presale.tokens.length; index++) {
+                console.log(presale.tokens[index].liquidity)
+//             this.chartData.datasets[0].data.push(Number(presale.tokens[index].liquidity));
+//
+//
+//             presale.chartData = this.chartData;
+// console.log(presale)
+//             this.presalesArray.push(presale);
+              }
+            }
+          }
+          this.pinnedPresales.push(presale);
+
+        }
+      }
     },
     pinPresale: function (presale) {
-      const pinnedPresales = localStorage.getItem('pinnedPresales');
+      const pinnedPresalesIds = localStorage.getItem('pinnedPresales');
 
-      if (pinnedPresales === null) {
-        this.$store.state.pinnedPresales.push(presale.id);
+      if (pinnedPresalesIds === null) {
+        const presaleObject = {
+          id: presale.id
+        }
+
+        this.$store.state.pinnedPresales.push(presaleObject);
         localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
+      } else {
+        const pinnedPresales = this.$store.getters.pinnedPresales;
+
+        if (pinnedPresales.length === 3) {
+          pinnedPresales.splice(0,1);
+        } else {
+          const presaleObject = {
+            id: presale.id
+          }
+
+          const pinnedPresale = pinnedPresales.find(p => p.id === presale.id);
+
+          if (pinnedPresale === undefined)
+            pinnedPresales.push(presaleObject);
+
+          this.$store.state.pinnedPresales = pinnedPresales;
+          localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
+        }
       }
 
-      this.setPinnedPresale();
-    },
-    setPinnedPresale: function () {
-      // TODO Implement
+      this.setPinnedPresales();
     },
     detectProvider: async function () {
       // Great change MetaMask is not installed
@@ -191,7 +243,7 @@ export default {
           });
     },
     handleAccountsChanged: function (accounts) {
-      if (accounts.length === 0) {
+      if (accounts && accounts.length === 0) {
         // MetaMask is locked or the user has not connected any accounts
         this.isConnected = false;
         this.showError(

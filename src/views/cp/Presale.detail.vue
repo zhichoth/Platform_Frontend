@@ -166,7 +166,7 @@
                   </div>
                 </div>
                 <div class="col-span-2">
-                  <Chart class="pl-5" style="height: 300px;" :chartData="chartData" :options="options" />
+                  <Chart class="pl-5" style="height: 300px;" :chartData="presale.chartData" :options="options" />
                 </div>
               </div>
             </div>
@@ -212,7 +212,23 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      presale: {},
+      presale: {
+        chartData: {
+          datasets: [
+            {
+              data: [],
+              backgroundColor: [
+                '#db7d02',
+                '#f78c00',
+                '#f49d2c',
+                '#f2a541',
+                '#f9af4d',
+                '#f9b761',
+              ],
+            }
+          ]
+        }
+      },
       contractPresale: {},
       contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
       isConnected: false,
@@ -228,27 +244,6 @@ export default {
       alert: {
         title: '',
         msg: ''
-      },
-      chartData: {
-        labels: [
-          'Uniswap Liquidity',
-          'Marketing',
-          'Team',
-          'Farming',
-          'PreSale'],
-        datasets: [
-          {
-            label: 'Label',
-            backgroundColor: [
-              '#db7d02',
-              '#f78c00',
-              '#f49d2c',
-              '#f2a541',
-              '#f9af4d',
-              '#f9b761'],
-            data: []
-          }
-        ]
       },
       options: {
         responsive: true,
@@ -293,12 +288,28 @@ export default {
       if (response.status !== 200)
         return this.showError(response);
 
-      this.presale = response.data.presale;
+      const presale = response.data.presale;
+      presale.chartData = {};
+      presale.chartData.datasets = [];
+      const dataset = {
+        data: [],
+        backgroundColor: [
+          '#db7d02',
+          '#f78c00',
+          '#f49d2c',
+          '#f2a541',
+          '#f9af4d',
+          '#f9b761',
+        ],
+      }
+      presale.chartData.datasets.push(dataset);
+
+      this.presale = presale;
     },
     getPresalesGraph: async function () {
       if (this.presale.tokens && this.presale.tokens.length > 0) {
         for (let index = 0; index < this.presale.tokens.length; index++) {
-          this.chartData.datasets[0].data.push(Number(this.presale.tokens[index].liquidity));
+          this.presale.chartData.datasets[0].data.push(Number(this.presale.tokens[index].liquidity));
         }
       }
     },

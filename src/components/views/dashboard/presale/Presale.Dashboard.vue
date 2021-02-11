@@ -3,8 +3,8 @@
     <!-- Pinned projects -->
     <div class="px-4 mt-6 sm:px-6 lg:px-8">
       <h2 class="text-gray-500 text-xs font-medium uppercase tracking-wide">Pinned Presales</h2>
-      <ul v-if="presalesArray.length > 0" class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 mt-3">
-        <li v-for="(presale, key) in presalesArray" class="relative grid-cols-3 shadow-sm" :key="key">
+      <ul v-if="presales.length > 0" class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 mt-3">
+        <li v-for="(presale, key) in presales" class="relative grid-cols-3 shadow-sm" :key="key">
           <div class="flex-root pt-2 pb-2 pl-6 rounded-tl-lg rounded-tr-lg bg-yellow-500">
             <img class="h-8 inline-block" src="/assets/images/logo.svg">
             <h1 class="inline-block pl-5">
@@ -56,8 +56,7 @@
                 </div>
               </div>
               <div class="sm:col-span-1">
-                {{ presale.chartData }}
-                <Chart class="pl-5" style="height: 300px;" :chartData="chartData" :options="options" />
+                <Chart class="pl-5" style="height: 300px;" :chartData="presale.chartData" :options="options" />
               </div>
             </div>
             <div class="sm:col-span-1 text-center pb-6">
@@ -121,21 +120,21 @@ export default {
   },
   methods: {
     getPresalesGraph: async function () {
-      for (let i = 0; i < this.presales.length; i++) {
-        const presale = this.presales[i];
-        console.log(presale.tokens)
-        if (presale.tokens && presale.tokens.length > 0) {
-          for (let index = 0; index < presale.tokens.length; index++) {
-            console.log(presale.tokens[index].liquidity)
+      // for (let i = 0; i < this.presales.length; i++) {
+      //   const presale = this.presales[i];
+      //   console.log(presale.tokens)
+      //   if (presale.tokens && presale.tokens.length > 0) {
+      //     for (let index = 0; index < presale.tokens.length; index++) {
+      //       console.log(presale.tokens[index].liquidity)
 //             this.chartData.datasets[0].data.push(Number(presale.tokens[index].liquidity));
 //
 //
 //             presale.chartData = this.chartData;
 // console.log(presale)
 //             this.presalesArray.push(presale);
-          }
-        }
-      }
+//           }
+//         }
+//       }
     },
   }
 }

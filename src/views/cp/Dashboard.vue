@@ -21,7 +21,6 @@
         
         <PreSales 
             :presales="pinnedPresales"
-            :chartData="chartData"
             :options="options" />
 
         <PreSalesTable
@@ -63,35 +62,14 @@ export default {
     provider: window.ethereum,
     chainId: null,
     pinnedPresales: [],
-    presalesChart: [], // empty array
     presales: [], // empty array
+    presalesArray: [],
     showConnectionButton: false,
     showDownloadButton: false,
     showCreatePresaleModal: true,
     alert: {
       title: '',
       msg: ''
-    },
-    chartData: {
-        labels: [
-          'Uniswap Liquidity', 
-          'Marketing',
-          'Team',
-          'Farming',
-          'PreSale'],
-        datasets: [
-          {
-            label: 'Label',
-            backgroundColor: [
-              '#db7d02', 
-              '#f78c00',
-              '#f49d2c',
-              '#f2a541', 
-              '#f9af4d',
-              '#f9b761'],
-            data: []
-          }
-        ]
     },
     options: {
       responsive: true,
@@ -103,13 +81,10 @@ export default {
     },
   }),
   beforeMount: async function () {
-    // Get Presales
-    await this.getPresalesGraph();
     await this.getPresales();
     await this.setPinnedPresales();
   },
   mounted: async function () {
-
     if (this.provider === undefined) {
       this.isLoaded = true;
     }
@@ -123,25 +98,6 @@ export default {
     }
   },
   methods: {
-    getPresalesGraph: async function () {
-      const response = await axios.get(`/assets/data/chart.json`);
-      
-      if (response.status !== 200)
-        return this.showError(response);
-
-      const preSales = response.data;
-      this.presalesChart = preSales;
-
-      if (preSales && preSales.length > 0) {
-        for (let index = 0; index < preSales.length; index++) {
-          this.chartData.datasets[0].data.push(preSales[index].uniswap);
-          this.chartData.datasets[0].data.push(preSales[index].marketing);
-          this.chartData.datasets[0].data.push(preSales[index].team);
-          this.chartData.datasets[0].data.push(preSales[index].farming);
-          this.chartData.datasets[0].data.push(preSales[index].presale);
-        }
-      }
-    },
     getPresales: async function () {
       const response = await axios.get(`${process.env.VUE_APP_SERVICE}/api/v1/presales`);
       if (response.status !== 200)
@@ -151,6 +107,7 @@ export default {
     },
     setPinnedPresales: async function () {
       let pinnedPresales = localStorage.getItem('pinnedPresales');
+
       if (!pinnedPresales) return;
 
       pinnedPresales = JSON.parse(pinnedPresales);
@@ -161,22 +118,28 @@ export default {
         if (presale) {
           for (let i = 0; i < this.presales.length; i++) {
             const presale = this.presales[i];
-            console.log(presale.tokens)
-            if (presale.token && presale.tokens.length > 0) {
-              console.log(presale)
+            presale.chartData = {};
+            presale.chartData.datasets = [];
+            const dataset = {
+              data: [],
+              backgroundColor: [
+                '#db7d02',
+                '#f78c00',
+                '#f49d2c',
+                '#f2a541',
+                '#f9af4d',
+                '#f9b761',
+              ],
+            }
+            presale.chartData.datasets.push(dataset);
+            if (presale.tokens && presale.tokens.length > 0) {
               for (let index = 0; index < presale.tokens.length; index++) {
-                console.log(presale.tokens[index].liquidity)
-//             this.chartData.datasets[0].data.push(Number(presale.tokens[index].liquidity));
-//
-//
-//             presale.chartData = this.chartData;
-// console.log(presale)
-//             this.presalesArray.push(presale);
+                const liquidity = presale.tokens[index].liquidity;
+                 presale.chartData.datasets[0].data.push(Number(liquidity));
               }
             }
           }
           this.pinnedPresales.push(presale);
-
         }
       }
     },
@@ -243,7 +206,7 @@ export default {
           });
     },
     handleAccountsChanged: function (accounts) {
-      if (accounts && accounts.length === 0) {
+      if (accounts !== null && accounts.length === 0) {
         // MetaMask is locked or the user has not connected any accounts
         this.isConnected = false;
         this.showError(

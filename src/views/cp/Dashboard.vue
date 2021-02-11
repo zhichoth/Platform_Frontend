@@ -143,7 +143,7 @@ export default {
         }
       }
     },
-    pinPresale: function (presale) {
+    pinPresale: async function (presale) {
       const pinnedPresalesIds = localStorage.getItem('pinnedPresales');
 
       if (pinnedPresalesIds === null) {
@@ -163,6 +163,11 @@ export default {
             id: presale.id
           }
 
+          // User deposited to presale
+          // get information
+          const getUserPresaleInformation = await this.getUserPresaleInformation();
+
+
           const pinnedPresale = pinnedPresales.find(p => p.id === presale.id);
 
           if (pinnedPresale === undefined)
@@ -174,6 +179,19 @@ export default {
       }
 
       this.setPinnedPresales();
+    },
+    getUserPresaleInformation: async function () {
+      const response = await axios.get(process.env.VUE_APP_PRESALE_CONTRACT_URL);
+
+      if (response.status !== 200)
+        return this.showError(response);
+
+      const presaleContractAbi = response.data.abi;
+      const web3 = new Web3(this.provider); // TODO Remove later "http://127.0.0.1:7545"
+
+      const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
+      // presaleContractInterface.options.address = process.env.VUE_APP_PRESALE_CONTRACT;
+      // this.contractPresale = await presaleContractInterface.methods.Presales(this.id).call();
     },
     detectProvider: async function () {
       // Great change MetaMask is not installed

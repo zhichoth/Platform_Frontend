@@ -320,6 +320,37 @@ export default {
     setDivideTokens: function () {
       this.divideTokens = !this.divideTokens;
       this.burnTokens = false;
+    },
+    createPresale: function () {
+      // const tokens = [];
+      // const socials = [];
+      const presale = {
+        // tokenName:,
+        // tokenAddress:,
+        // companyName:,
+        // description:,
+        // softcap:,
+        // hardcap:,
+        // liquidityLocked:,
+        // totalSupply:,
+        // tokensLocked:,
+        // tokenPrice:,
+        // tokenomics: JSON.stringify(tokens),
+        // socials: JSON.stringify(socials),
+        // startDate:,
+        // endDate: ,
+      }
+
+      axios.post(`${process.env.VUE_APP_SERVICE}/${process.env.VUE_APP_CREATE_PRESALE}`, presale, {
+        headers: {
+          'Content-Type': 'application/json',
+          //'Authorization': `Bearer ${process.env.VUE_APP_BEARER}`
+        },
+      }).then((response) => {
+        console.log(response)
+      }).catch((e) => {
+        console.log(e);
+      });
     }
   },
   watch: {

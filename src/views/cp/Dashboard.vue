@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     getPresales: async function () {
-      const response = await axios.get(`${process.env.VUE_APP_SERVICE}/api/v1/presales`);
+      const response = await axios.get(`${process.env.VUE_APP_SERVICE}/presales`);
       if (response.status !== 200)
         return this.showError(response);
 
@@ -156,26 +156,26 @@ export default {
       } else {
         const pinnedPresales = this.$store.getters.pinnedPresales;
 
-        if (pinnedPresales.length === 3) {
-          pinnedPresales.splice(0,1);
-        } else {
-          const presaleObject = {
-            id: presale.id
-          }
-
-          // User deposited to presale
-          // get information
-          const getUserPresaleInformation = await this.getUserPresaleInformation();
-
-
-          const pinnedPresale = pinnedPresales.find(p => p.id === presale.id);
-
-          if (pinnedPresale === undefined)
-            pinnedPresales.push(presaleObject);
-
-          this.$store.state.pinnedPresales = pinnedPresales;
-          localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
+        const presaleObject = {
+          id: presale.id
         }
+
+        const pinnedPresale = pinnedPresales.find(p => p.id === presale.id);
+
+        if (pinnedPresale === undefined && pinnedPresales.length === 3) {
+          pinnedPresales.splice(0, 1);
+          pinnedPresales.push(presaleObject);
+        } else if (pinnedPresale === undefined) {
+          pinnedPresales.push(presaleObject);
+        }
+
+        // TODO
+        // User deposited to presale
+        // get information
+        const getUserPresaleInformation = await this.getUserPresaleInformation();
+
+        this.$store.state.pinnedPresales = pinnedPresales;
+        localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
       }
 
       this.setPinnedPresales();

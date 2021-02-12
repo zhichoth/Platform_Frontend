@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Dashboard from '../views/cp/Dashboard.vue'
 import Yield from '../views/cp/Yield.vue'
-import Presale from '../views/cp/Presale.vue'
+import Presale from '../views/cp/Presale.create.vue'
 import PresaleDetail from '../views/cp/Presale.detail.vue'
 import Privacy from '../views/Privacy-policy.vue'
 

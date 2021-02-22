@@ -39,200 +39,29 @@
               :title="title" />
 
           <div class="block px-4 mt-6 sm:px-6 lg:px-8">
-            <div v-if="preSaleProgress === 1" class="mt-8 text-center">
+            <div class="my-8 text-center">
               <TokenAddress
                 :account="account"
-                @nextStep="nextStep"/>
+                :token="token"
+              />
             </div>
+            <hr>
 
-            <div v-if="preSaleProgress === 1" class="mt-8 text-center">
-              <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
-                Tokenomics
-              </h1>
-              <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">
-                Enter your tokenomics
-              </h3>
-              <h3 v-if="totalSupply > 0" class="text-2xl pt-6 font-light text-yellow-500">
-                Total supply: {{ totalSupply }}
-              </h3>
-              <div class="h-3 mx-auto mt-4 relative max-w-xl rounded-full overflow-hidden">
-                <div class="w-full h-full bg-gray-200 absolute"></div>
-                <div class="h-full bg-yellow-500 absolute" :style="`width: ${progression}%`"></div>
-              </div>
-              <div class="mt-10">
-                <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
-                  <div class="grid grid-cols-1 gap-6">
-                    <div class="col-span-1">
-                      <label :for="totalSupply" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Total supply
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="number" v-model="totalSupply" placeholder="Total supply" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                  </div>
-                  <div v-if="totalSupply > 0" class="grid grid-cols-3 gap-6">
-                    <div class="col-span-2">
-                      <label :for="preSaleTotal" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Presale allocation
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="number" v-model="preSaleTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                    <div class="col-span-1">
-                      <label :for="preSalePercentage" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Presale allocation in %
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="text" v-model="preSalePercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-200 dark:bg-gray-700">
-                      </div>
-                    </div>
-                  </div>
-                  <div v-if="totalSupply > 0" class="grid grid-cols-3 gap-6">
-                    <div class="col-span-2">
-                      <label :for="liquidityTotal" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Liquidity allocation
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="number" v-model="liquidityTotal" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                    <div class="col-span-1">
-                      <label :for="liquidityPercentage" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Liquidity allocation in %
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="text" v-model="liquidityPercentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-200 dark:bg-gray-700">
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    v-for="(allocation, key) in allocations"
-                    :key="key"
-                    class="grid grid-cols-3 gap-6">
-                    <div class="col-span-1">
-                      <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Name allocation
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="text" v-model="allocation.name" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                    <div class="col-span-1">
-                      <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Amount
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="number" v-model="allocation.amount" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                    <div class="col-span-1">
-                      <label class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Allocation in %
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="text" v-model="allocation.percentage" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-200 dark:bg-gray-700">
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    v-if="
-                    totalSupply > 0 &&
-                    preSaleTotal > 0 &&
-                    liquidityTotal > 0"
-                      class="grid grid-cols-1 gap-6">
-                    <div class="col-span-1 text-center">
-                      <button
-                       v-on:click="addAllocation"
-                       v-if="showAddAllocationButton"
-                       type="button"
-                       class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
-                        Add Allocation
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="my-8 text-center">
+              <Socials
+                  :socials="socials"
+                  @addSocials="addSocials"
+                  @deleteSocial="deleteSocial"
+              />
             </div>
-          </div>
+            <hr>
 
-          <div class="block px-4 mt-6 sm:px-6 lg:px-8">
-            <div v-if="preSaleProgress === 1" class="mt-10 text-center">
-              <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
-                Unsold tokens
-              </h1>
-              <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">
-                Make a choice
-              </h3>
-              <div class="mt-5">
-                <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
-                  <div class="grid grid-cols-2 gap-6">
-                    <div class="col-span-1 text-center">
-                      <button type="button" v-on:click="setBurnTokens" v-if="!burnTokens" class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                        Burn remaining tokens
-                      </button>
-                      <button type="button" v-on:click="setBurnTokens" v-else class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                        Burn remaining tokens
-                      </button>
-                    </div>
-                    <div class="col-span-1 text-center">
-                      <button type="button" v-on:click="setDivideTokens" v-if="!divideTokens" class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-gray-700 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                        Divide remaining tokens
-                      </button>
-                      <button type="button" v-on:click="setDivideTokens" v-else class="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                        Divide remaining tokens
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="block px-4 mt-6 sm:px-6 lg:px-8">
-            <div v-if="preSaleProgress === 1" class="mt-10 text-center">
-              <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
-                ETH Hard & Softcap
-              </h1>
-              <h3 class="text-4xl font-light text-gray-700 dark:text-gray-200">
-                Price per token
-              </h3>
-              <div class="mt-5">
-                <div class="dark:bg-gray-800 bg-gray-50 px-5 py-5 rounded-lg  border border-gray-200">
-                  <div class="grid grid-cols-1 gap-6">
-                    <div class="col-span-1">
-                      <label :for="totalSupply" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        ETH supply
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="number" v-model="totalSupply" readonly placeholder="1000" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-3 gap-6">
-                    <div class="col-span-2">
-                      <label :for="tokenPriceETH" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Token price in ETH
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="number" v-model="tokenPriceETH" class="w-full mt-2 mb-6 px-3 py-1 border rounded-lg text-gray-500 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                    <div class="col-span-1">
-                      <label :for="tokenPriceDollar" class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Token price in $
-                      </label>
-                      <div class="mt-1 flex rounded-md">
-                        <input type="text" v-model="tokenPriceDollar" readonly class="w-full mt-2 mb-6 px-3 py-1 border border-yellow-500 rounded-lg text-yellow-500 bg-gray-100 dark:bg-gray-700">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="my-8 text-center">
+              <Tokenomics
+                  :tokenomics="tokenomics"
+                  :chartData="chartData"
+                  :options="chartDataOptions"
+              />
             </div>
           </div>
         </main>
@@ -249,6 +78,8 @@ import AlertModal from '@/components/modals/Alert.modals'
 import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
 import TokenAddress from '@/components/presale/TokenAddress'
+import Socials from '@/components/presale/Socials'
+import Tokenomics from '@/components/presale/Tokenomics'
 
 export default {
   name: 'presale.cp.views',
@@ -258,7 +89,9 @@ export default {
     AlertModal,
     Header,
     PageTitle,
-    TokenAddress
+    TokenAddress,
+    Socials,
+    Tokenomics
   },
   data: () => ({
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
@@ -269,22 +102,47 @@ export default {
     account: '',
     provider: window.ethereum,
     chainId: null,
-    preSaleProgress: 1,
-    progression: 0,
-    tokenAddress: null,
-    totalSupply: null,
-    preSaleTotal: null,
-    preSalePercentage: 0,
-    liquidityTotal: null,
-    liquidityPercentage: 0,
-    allocations: [],
-    allocationsPercentage: null,
-    showAddAllocationButton: true,
-    divideTokens: false,
-    burnTokens: false,
-    ETHSupply: 0,
-    tokenPriceETH: 0,
-    tokenPriceDollar: 0,
+    token: {
+      address: '',
+      name: '',
+      company: ''
+    },
+    socials: [
+      {
+        type: 0,
+        url: ''
+      },
+    ],
+    tokenomics: [],
+    chartData: {
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [
+            '#db7d02',
+            '#f78c00',
+            '#f49d2c',
+            '#f2a541',
+            '#f9af4d',
+            '#f9b761',
+          ],
+        }
+      ]
+    },
+    chartDataOptions: {
+      responsive: true,
+      legend: {
+        display: false,
+        position: 'left',
+      },
+      maintainAspectRatio: false
+    },
+    info: {
+      softcap: null,
+      hardcap: null,
+      totalSupply: null,
+      tokenPrice: null
+    },
     alert: {
       title: '',
       msg: ''
@@ -299,27 +157,26 @@ export default {
   },
   mounted: function () {
     this.isLoaded = true;
+
+    for (let index = 0; index < 4; index++) {
+      this.chartData.datasets[0].data.push(Number(25));
+    }
   },
   methods: {
-    addAllocation: function () {
-      const allocation = {
-        name: '',
-        amount: null,
-        percentage: 0,
-      }
-      this.allocations.push(allocation);
+    // addAllocation: function () {
+    //   const allocation = {
+    //     name: '',
+    //     amount: null,
+    //     percentage: 0,
+    //   }
+    //   this.allocations.push(allocation);
+    // },
+    addSocials: function() {
+      this.socials.push({type: 4, url:''});
     },
-    // Emit from TokenAddress Component
-    nextStep: function (tokenAddress, currentStep) {
-      this.tokenAddress = tokenAddress;
-    },
-    setBurnTokens: function () {
-      this.burnTokens = !this.burnTokens;
-      this.divideTokens = false;
-    },
-    setDivideTokens: function () {
-      this.divideTokens = !this.divideTokens;
-      this.burnTokens = false;
+    deleteSocial: function(key) {
+      if (this.socials.length > 1)
+        this.socials.splice(key, 1);
     },
     createPresale: function () {
       // const tokens = [];

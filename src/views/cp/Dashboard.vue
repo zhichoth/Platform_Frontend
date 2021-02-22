@@ -99,7 +99,8 @@ export default {
   },
   methods: {
     getPresales: async function () {
-      const response = await axios.get(`${process.env.VUE_APP_SERVICE}/presales`);
+      const response = await axios.get(`${process.env.VUE_APP_SERVICE_PHP}/presales`);
+      // const response = await axios.get(`${process.env.VUE_APP_SERVICE}/getall`);
       if (response.status !== 200)
         return this.showError(response);
 

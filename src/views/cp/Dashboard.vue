@@ -179,7 +179,7 @@ export default {
         localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
       }
 
-      this.setPinnedPresales();
+      await this.setPinnedPresales();
     },
     getUserPresaleInformation: async function () {
       const response = await axios.get(process.env.VUE_APP_PRESALE_CONTRACT_URL);

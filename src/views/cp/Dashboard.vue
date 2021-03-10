@@ -99,12 +99,13 @@ export default {
   },
   methods: {
     getPresales: async function () {
-      const response = await axios.get(`${process.env.VUE_APP_SERVICE_PHP}/presales`);
-      // const response = await axios.get(`${process.env.VUE_APP_SERVICE}/getall`);
+      // const response = await axios.get(`${process.env.VUE_APP_SERVICE_PHP}/presales`);
+      const response = await axios.get(`${process.env.VUE_APP_SERVICE}/getall`);
+      console.log(response);
       if (response.status !== 200)
         return this.showError(response);
 
-      this.presales = response.data.presales;
+      this.presales = response.data.items;
     },
     setPinnedPresales: async function () {
       let pinnedPresales = localStorage.getItem('pinnedPresales');
@@ -189,6 +190,7 @@ export default {
 
       const presaleContractAbi = response.data.abi;
       const web3 = new Web3(this.provider); // TODO Remove later "http://127.0.0.1:7545"
+      console.log(web3);
 
       const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
       // presaleContractInterface.options.address = process.env.VUE_APP_PRESALE_CONTRACT;

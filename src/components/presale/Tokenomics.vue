@@ -17,35 +17,71 @@
             </div>
 
             <div class="block mt-8">
-              <div v-for="(allocation, key) in allocations" class="grid grid-cols-5 gap-4" :key="key">
-                <div class="col-span-2 text-left">
-                  <label :for="allocation.name" class="text-white">Allocation</label>
-                  <input type="text" v-model="allocation.name" placeholder="Name" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+              <div v-for="(allocation, key) in allocations" class="block" :key="key">
+                <div class="grid grid-cols-5 gap-4">
+                  <div class="col-span-2 text-left">
+                    <label :for="allocation.name" class="text-white">Allocation</label>
+                    <input type="text" v-model="allocation.name" placeholder="Name" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+                  </div>
+                  <div class="text-left">
+                    <label :for="allocation.amount" class="text-white">Amount</label>
+                    <input type="number" v-model="allocation.amount" min="0" placeholder="Amount" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+                  </div>
+                  <div>
+                    <label class="inline-flex items-center mt-9">
+                      <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="allocation.timelocked">
+                      <span class="text-white ml-2">Timelocked</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label class="inline-flex items-center mt-9">
+                      <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="allocation.interval">
+                      <span class="text-white ml-2">Interval</span>
+                    </label>
+                  </div>
                 </div>
-                <div class="text-left">
-                  <label :for="allocation.percentage" class="text-white">Percentage</label>
-                  <input type="number" v-model="allocation.percentage" min="0" placeholder="precentage" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
-                </div>
-                <div>
-                  <label class="inline-flex items-center mt-9">
-                    <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="allocation.timelocked">
-                    <span class="text-white ml-2">Timelocked</span>
+                <div class="block w-1/2" v-if="allocation.timelocked">
+                  <label class="items-center">
+                    <label
+                        :for="allocation.releaseDate"
+                        class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                      Release date
+                    </label>
+                    <input type="date"
+                           class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                           v-model="allocation.releaseDate">
                   </label>
                 </div>
-                <div>
-                  <label class="inline-flex items-center mt-9">
-                    <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="allocation.permanent">
-                    <span class="text-white ml-2">Permanent</span>
-                  </label>
+                <div class="block w-full" v-if="allocation.interval">
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-1">
+                        <label
+                            :for="allocation.intervalStartDate"
+                            class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                          Start date
+                        </label>
+                        <input type="date"
+                               class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                               v-model="allocation.intervalStartDate">
+                    </div>
+                    <div class="col-span-1">
+                      <label
+                          :for="allocation.intervalInDays"
+                          class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Interval
+                      </label>
+                      <input type="number"
+                             placeholder="Interval in days"
+                             class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                             v-model="allocation.intervalInDays">
+                    </div>
+                  </div>
                 </div>
               </div>
               <div v-if="totalPercentage < 100" class="block mt-5">
                 <div>
-                    <button v-on:click="addAllocation" class="flex py-2 px-4 m-auto rounded bg-yellow-500">
-                      <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                      </svg>
+                    <button v-on:click="addAllocation" class="flex py-2 px-4 m-auto rounded bg-yellow-500 hover:bg-yellow-600">
+                      <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                       <span class="flex pl-3 text-white">Add allocation</span>
                     </button>
                 </div>
@@ -79,11 +115,14 @@ export default {
     totalPercentage: 0,
     allocations: [
       {
-        percentage: 0,
+        amount: null,
         name: '',
         timelocked: false,
-        permanent: false,
         style: 0,
+        releaseDate: null,
+        interval: false,
+        intervalStartDate: null,
+        intervalInDays: null,
       }
     ],
     backgroundColors: [
@@ -109,10 +148,13 @@ export default {
     },
     addAllocation: function() {
       const allocation = {
-        percentage: 0,
+        amount: null,
         name: '',
         timelocked: false,
         permanent: false,
+        releaseData: null,
+        intervalStartDate: null,
+        intervalInDays: null,
       }
       this.allocations.push(allocation);
     },
@@ -132,19 +174,19 @@ export default {
     },
     allocations: {
       handler() {
-        let counter = 0;
-        this.allocations.forEach(allocation => {
-          console.log(this.totalPercentage);
-          if (this.totalPercentage !== 100 && this.totalPercentage < 100 && (this.totalPercentage + Number(allocation.percentage) <= 100)) {
-            this.totalPercentage += Number(allocation.percentage);
-
-            allocation.style = `width: ${allocation.percentage}%; background-color: ${this.backgroundColors[counter]}`;
-            counter++;
-
-            // Add allocation
-          }
-          this.totalPercentage = 0;
-        });
+        // let counter = 0;
+        // this.allocations.forEach(allocation => {
+        //   console.log(this.totalPercentage);
+        //   if (this.totalPercentage !== 100 && this.totalPercentage < 100 && (this.totalPercentage + Number(allocation.amount) <= 100)) {
+        //     this.totalPercentage += Number(allocation.amount);
+        //
+        //     allocation.style = `width: ${allocation.amount}%; background-color: ${this.backgroundColors[counter]}`;
+        //     counter++;
+        //
+        //     // Add allocation
+        //   }
+        //   this.totalPercentage = 0;
+        // });
       },
       deep: true
     }

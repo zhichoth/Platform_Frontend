@@ -15,12 +15,12 @@
                 <th class="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Tokens locked
                 </th>
-                <th class="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Coin price
-                </th>
-                <th class="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Value locked
-                </th>
+<!--                <th class="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider">-->
+<!--                  Coin price-->
+<!--                </th>-->
+<!--                <th class="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider">-->
+<!--                  Value locked-->
+<!--                </th>-->
                 <th class="hidden md:table-cell px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Softcap
                 </th>
@@ -37,13 +37,10 @@
                   <div class="flex space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.company_name }}
+                        {{ presale.name }}
                         <br>
                       </span>
-                      <span class="text-yellow-500">
-                        {{ presale.token_name }}
-                        <br>
-                      </span>
+
                     </a>
                   </div>
                 </td>
@@ -51,25 +48,34 @@
                   <div class="space-x-3 text-center">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.liquidity_locked }}%
+                        {{ presale.liquidityPercentage }}%
                       </span>
                     </a>
                   </div>
                 </td>
+<!--                <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">-->
+<!--                  <div class="text-center space-x-3">-->
+<!--                    <a href="#" class="truncate hover:text-gray-600">-->
+<!--                      <span>-->
+<!--                        {{ presale.tokens_locked }} {{ presale.name }}-->
+<!--                      </span>-->
+<!--                    </a>-->
+<!--                  </div>-->
+<!--                </td>-->
+<!--                <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">-->
+<!--                  <div class="text-center space-x-3 lg:pl-2">-->
+<!--                    <a href="#" class="truncate hover:text-gray-600">-->
+<!--                      <span>-->
+<!--                        ${{ presale.token_price }}-->
+<!--                      </span>-->
+<!--                    </a>-->
+<!--                  </div>-->
+<!--                </td>-->
                 <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="text-center space-x-3">
+                  <div class="text-center items-center space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.tokens_locked }} {{ presale.name }}
-                      </span>
-                    </a>
-                  </div>
-                </td>
-                <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="text-center space-x-3 lg:pl-2">
-                    <a href="#" class="truncate hover:text-gray-600">
-                      <span>
-                        ${{ presale.token_price }}
+                        {{ parseToWei(presale.amountOfTokensLocked) }}
                       </span>
                     </a>
                   </div>
@@ -78,7 +84,7 @@
                   <div class="text-center items-center space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        ${{ presale.value_locked }}
+                        {{ presale.softcapInEth }} ETH
                       </span>
                     </a>
                   </div>
@@ -87,16 +93,7 @@
                   <div class="text-center items-center space-x-3">
                     <a href="#" class="truncate hover:text-gray-600">
                       <span>
-                        {{ presale.softcap }} ETH
-                      </span>
-                    </a>
-                  </div>
-                </td>
-                <td class="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  <div class="text-center items-center space-x-3">
-                    <a href="#" class="truncate hover:text-gray-600">
-                      <span>
-                       {{ presale.hardcap }} ETH
+                       {{ presale.hardcapInEth }} ETH
                       </span>
                     </a>
                   </div>
@@ -131,9 +128,12 @@ export default {
     presale: {},
   }),
   methods: {
+    parseToWei: function (eth) {
+      return eth;
+    },
     showPresale: function (presale) {
       this.$store.state.presale = presale;
-      this.$router.push({ name: 'presale.show', params: {id: presale.id} });
+      this.$router.push({ name: 'presale.show', params: {id: presale.presaleId} });
     },
     pinPresale: function (presale) {
       this.$emit('pinPresale', presale);

@@ -40,9 +40,25 @@
 
           <div class="block px-4 mt-6 sm:px-6 lg:px-8">
             <div class="my-8 text-center">
-              <TokenAddress
+              <PresaleInformation
                 :account="account"
                 :token="token"
+              />
+            </div>
+            <hr>
+
+            <div class="my-8 text-center">
+              <Liquidity
+                  :liquidity="liquidity"
+              />
+            </div>
+            <hr>
+
+            <div class="my-8 text-center">
+              <Tokenomics
+                  :tokenomics="tokenomics"
+                  :chartData="chartData"
+                  :options="chartDataOptions"
               />
             </div>
             <hr>
@@ -55,14 +71,6 @@
               />
             </div>
             <hr>
-
-            <div class="my-8 text-center">
-              <Tokenomics
-                  :tokenomics="tokenomics"
-                  :chartData="chartData"
-                  :options="chartDataOptions"
-              />
-            </div>
           </div>
         </main>
       </transition>
@@ -77,9 +85,10 @@ import Profile from '@/components/Profile'
 import AlertModal from '@/components/modals/Alert.modals'
 import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
-import TokenAddress from '@/components/presale/TokenAddress'
-import Socials from '@/components/presale/Socials'
+import PresaleInformation from '@/components/presale/Information'
+import Liquidity from '@/components/presale/Liquidity'
 import Tokenomics from '@/components/presale/Tokenomics'
+import Socials from '@/components/presale/Socials'
 
 export default {
   name: 'presale.cp.views',
@@ -89,9 +98,10 @@ export default {
     AlertModal,
     Header,
     PageTitle,
-    TokenAddress,
+    PresaleInformation,
+    Liquidity,
+    Tokenomics,
     Socials,
-    Tokenomics
   },
   data: () => ({
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
@@ -105,7 +115,10 @@ export default {
     token: {
       address: '',
       name: '',
-      company: ''
+      softcap: null,
+      hardcap: null,
+      startDate: new Date(),
+      endDate: new Date(),
     },
     socials: [
       {
@@ -113,6 +126,10 @@ export default {
         url: ''
       },
     ],
+    liquidity: {
+      amount: null,
+      precentage: 0,
+    },
     tokenomics: [],
     chartData: {
       datasets: [

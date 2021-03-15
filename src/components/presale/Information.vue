@@ -78,6 +78,20 @@
           </div>
           <div class="block mt-4">
             <label
+                :for="token.tokenPresaleAllocation"
+                class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+              Token Presale Allocation
+            </label>
+            <div class="mt-1 flex rounded-md">
+              <input
+                  type="number"
+                  v-model="token.tokenPresaleAllocation"
+                  placeholder="Token presale allocation"
+                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+            </div>
+          </div>
+          <div class="block mt-4">
+            <label
                 :for="token.startDate"
                 class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
               Start date
@@ -104,13 +118,21 @@
                   class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
             </div>
           </div>
+          <div v-if="tokensPerEth" class="block mt-5  text-left">
+            <span class="text-white">
+              {{tokensPerEth}}
+            </span>
+            <span class="block mt-3 text-white">
+              {{ethPerToken}}
+            </span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   name: 'presale.TokenAddress.components',
   props: {
@@ -118,6 +140,8 @@ export default {
     token: Object
   },
   data: () => ({
+    tokensPerEth: null,
+    ethPerToken: null,
     error: {
       tokenAddress: '',
       tokenName: '',
@@ -126,9 +150,19 @@ export default {
   watch: {
     token: {
       handler() {
-        if (this.token.address !== '') {
-          const response = axios.get(`https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=${this.token.address}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`);
-          console.log(response);
+        // if (this.token.address !== '') {
+        //   const response = axios.get(`https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=${this.token.address}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`);
+        //   console.log(response);
+        // }
+
+        if (this.token.hardcap !== null && this.token.tokenPresaleAllocation !== null) {
+          const tokenPerEth = this.token.tokenPresaleAllocation / this.token.hardcap;
+          this.tokensPerEth = `${tokenPerEth} tokens per ETH`;
+
+          const ethPerToken = this.token.hardcap / this.token.tokenPresaleAllocation;
+          this.ethPerToken =`${ethPerToken} ETH per token`;
+        } else {
+          this.tokensPerEth = null;
         }
       },
       deep: true

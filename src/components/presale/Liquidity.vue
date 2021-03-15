@@ -34,6 +34,75 @@
                   class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
             </div>
           </div>
+          <div class="mx-auto w-1/2 mt-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="inline-flex items-center mt-9">
+                  <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="liquidity.locked">
+                  <span class="text-white ml-2">Locked</span>
+                </label>
+              </div>
+              <div>
+                <label class="inline-flex items-center mt-9">
+                  <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="liquidity.permaBurn">
+                  <span class="text-white ml-2">Perma-burn</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="liquidity.locked"
+            class="block mx-auto w-1/2">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="inline-flex items-center mt-9">
+                  <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="liquidity.timeLocked">
+                  <span class="text-white ml-2">Timelocked</span>
+                </label>
+              </div>
+              <div>
+                <label class="inline-flex items-center mt-9">
+                  <input type="checkbox" class="form-checkbox w-4 h-4 rounded bg-gray-800 text-yellow-600" v-model="liquidity.interval">
+                  <span class="text-white ml-2">Interval</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="block w-full" v-if="liquidity.timeLocked">
+            <label class="items-center">
+              <label
+                  :for="liquidity.releaseDate"
+                  class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                Release date
+              </label>
+              <input type="date"
+                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                     v-model="liquidity.releaseDate">
+            </label>
+          </div>
+          <div v-if="liquidity.interval" class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <label
+                  :for="liquidity.intervalStartDate"
+                  class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                Start date
+              </label>
+              <input type="date"
+                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                     v-model="liquidity.intervalStartDate">
+            </div>
+            <div class="col-span-1">
+              <label
+                  :for="liquidity.intervalInDays"
+                  class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                Interval
+              </label>
+              <input type="number"
+                     placeholder="Interval in days"
+                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                     v-model="liquidity.intervalInDays">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -51,15 +120,22 @@ export default {
     }
   }),
   watch: {
-    // token: {
-    //   handler() {
-    //     if (this.token.address !== '') {
-    //       const response = axios.get(`https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=${this.token.address}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`);
-    //       console.log(response);
-    //     }
-    //   },
-    //   deep: true
-    // }
+    liquidity: {
+      handler() {
+        if (this.liquidity.permaBurn && !this.liquidity.locked) {
+          this.liquidity.locked = false;
+          this.liquidity.timeLocked = false;
+          this.liquidity.interval = false;
+        } else if (this.liquidity.permaBurn && this.liquidity.locked) {
+          this.liquidity.locked = false;
+          this.liquidity.timeLocked = false;
+          this.liquidity.interval = false;
+        } else if (this.liquidity.locked) {
+          this.liquidity.permaBurn = false;
+        }
+      },
+      deep: true
+    }
   }
 }
 </script>

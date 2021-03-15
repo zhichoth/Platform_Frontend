@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="block text-center">
-          <button v-on:click="addSocials" class="bg-yellow-500 mt-5 px-4 py-2 rounded text-white hover:bg-yellow-600">Add location</button>
+          <button v-on:click="addSocials" class="bg-yellow-500 mt-5 px-4 py-2 rounded text-white hover:bg-yellow-600">Add social</button>
         </div>
       </div>
     </div>

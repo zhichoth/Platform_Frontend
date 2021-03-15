@@ -19,9 +19,9 @@
         <PageTitle 
             :title="title" />
         
-        <PreSales 
-            :presales="pinnedPresales"
-            :options="options" />
+<!--        <PreSales -->
+<!--            :presales="pinnedPresales"-->
+<!--            :options="options" />-->
 
         <PreSalesTable
             :presales="presales"
@@ -39,7 +39,7 @@ import axios from 'axios'
 import AlertModal from '@/components/modals/Alert.modals'
 import Header from '@/components/Header'
 import PageTitle from '@/components/PageTitle'
-import PreSales from '@/components/views/dashboard/presale/Presale.Dashboard'
+// import PreSales from '@/components/views/dashboard/presale/Presale.Dashboard'
 import PreSalesTable from '@/components/views/dashboard/presale/tables/Presale.Table'
 import Web3 from "web3";
 
@@ -49,7 +49,7 @@ export default {
     AlertModal,
     Header,
     PageTitle,
-    PreSales,
+    // PreSales,
     PreSalesTable,
   },
   data: () => ({

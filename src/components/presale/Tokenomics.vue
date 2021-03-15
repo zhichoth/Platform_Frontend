@@ -14,6 +14,9 @@
               <span class="block text-white w-full mt-2">
                 {{totalPercentage}}%
               </span>
+              <span class="block text-white w-full mt-2">
+                {{liquidity.amount}}
+              </span>
             </div>
 
             <div class="block mt-8">
@@ -100,11 +103,10 @@
 import Chart from "@/components/views/dashboard/presale/charts/Presale.Chart";
 
 export default {
-  name: 'presale.Socials.components',
+  name: 'presale.Tokenomics.components',
   props: {
-    account: String,
-    socials: Array,
     tokenomics: Array,
+    liquidity: Object,
     chartData: Object,
     options: Object,
   },
@@ -140,12 +142,6 @@ export default {
     }
   }),
   methods: {
-    addSocials: function() {
-      this.$emit('addSocials');
-    },
-    deleteSocial: function(key) {
-      this.$emit('deleteSocial', key);
-    },
     addAllocation: function() {
       const allocation = {
         amount: null,
@@ -160,33 +156,25 @@ export default {
     },
   },
   watch: {
-    tokenAddress: {
-      handler() {
-        if (this.token.address === this.account) {
-          this.error.tokenAddress = '';
-          this.isValid = !this.isValid;
-        } else {
-          this.error.tokenAddress = 'Token address does not match your connected META MASK wallet.';
-          this.isValid = !this.isValid;
-        }
-      },
-      deep: true
-    },
     allocations: {
       handler() {
         // let counter = 0;
-        // this.allocations.forEach(allocation => {
-        //   console.log(this.totalPercentage);
-        //   if (this.totalPercentage !== 100 && this.totalPercentage < 100 && (this.totalPercentage + Number(allocation.amount) <= 100)) {
-        //     this.totalPercentage += Number(allocation.amount);
-        //
-        //     allocation.style = `width: ${allocation.amount}%; background-color: ${this.backgroundColors[counter]}`;
-        //     counter++;
-        //
-        //     // Add allocation
-        //   }
-        //   this.totalPercentage = 0;
-        // });
+        let percentage = 0;
+        this.allocations.forEach(allocation => {
+          // console.log(this.totalPercentage);
+          percentage += allocation.amount / this.liquidity.amount * 100;
+          console.log(percentage);
+          // if (this.totalPercentage !== 100 && this.totalPercentage < 100 && (this.totalPercentage + Number(allocation.amount) <= 100)) {
+          //   this.totalPercentage += Number(allocation.amount);
+          //
+          //   allocation.style = `width: ${allocation.amount}%; background-color: ${this.backgroundColors[counter]}`;
+          //   counter++;
+          //
+          //   // Add allocation
+          // }
+          // this.totalPercentage = 0;
+        });
+        console.log(percentage);
       },
       deep: true
     }

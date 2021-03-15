@@ -57,6 +57,7 @@
             <div class="my-8 text-center">
               <Tokenomics
                   :tokenomics="tokenomics"
+                  :liquidity="liquidity"
                   :chartData="chartData"
                   :options="chartDataOptions"
               />
@@ -120,17 +121,24 @@ export default {
       startDate: new Date(),
       endDate: new Date(),
     },
+    liquidity: {
+      amount: null,
+      precentage: null,
+      locked: false,
+      permaBurn: false,
+      timeLocked: false,
+      interval: false,
+      intervalStartDate: null,
+      releaseDate: null,
+      intervalInDays: null,
+    },
+    tokenomics: [],
     socials: [
       {
         type: 0,
         url: ''
       },
     ],
-    liquidity: {
-      amount: null,
-      precentage: 0,
-    },
-    tokenomics: [],
     chartData: {
       datasets: [
         {
@@ -228,55 +236,55 @@ export default {
     }
   },
   watch: {
-    progression: {
-      handler: function () {
-        if (this.progression === 100) {
-          this.showAddAllocationButton = false;
-        } else if (this.progression < 100) {
-          this.showAddAllocationButton = true;
-        } else if (this.progression > 100) {
-          this.showAddAllocationButton = false;
-          // TODO Presale is not valid.
-        }
-      }
-    },
-    preSaleTotal: {
-      handler: function (value) {
-        if (this.totalSupply <= 0) return;
-
-        this.preSalePercentage = (100 * value) / this.totalSupply;
-
-        this.progression = this.preSalePercentage + this.liquidityPercentage;
-      },
-    },
-    liquidityTotal: {
-      handler: function (value) {
-        if (this.totalSupply <= 0) return;
-
-        this.liquidityPercentage = (100 * value) / this.totalSupply;
-
-        this.progression = this.preSalePercentage + this.liquidityPercentage;
-      },
-    },
-    allocations: {
-      handler: function () {
-        if (this.totalSupply <= 0) return;
-
-        let allocationsPercentage = 0;
-        for (let i = 0; i < this.allocations.length; i++) {
-          allocationsPercentage += (100 * this.allocations[i].amount) / this.totalSupply;
-          this.allocations[i].percentage = (100 * this.allocations[i].amount) / this.totalSupply;
-        }
-
-        this.allocationsPercentage = allocationsPercentage;
-      },
-      deep: true
-    },
-    allocationsPercentage: {
-      handler: function () {
-        this.progression = this.preSalePercentage + this.liquidityPercentage + this.allocationsPercentage;
-      }
-    },
+    // progression: {
+    //   handler: function () {
+    //     if (this.progression === 100) {
+    //       this.showAddAllocationButton = false;
+    //     } else if (this.progression < 100) {
+    //       this.showAddAllocationButton = true;
+    //     } else if (this.progression > 100) {
+    //       this.showAddAllocationButton = false;
+    //       // TODO Presale is not valid.
+    //     }
+    //   }
+    // },
+    // preSaleTotal: {
+    //   handler: function (value) {
+    //     if (this.totalSupply <= 0) return;
+    //
+    //     this.preSalePercentage = (100 * value) / this.totalSupply;
+    //
+    //     this.progression = this.preSalePercentage + this.liquidityPercentage;
+    //   },
+    // },
+    // liquidityTotal: {
+    //   handler: function (value) {
+    //     if (this.totalSupply <= 0) return;
+    //
+    //     this.liquidityPercentage = (100 * value) / this.totalSupply;
+    //
+    //     this.progression = this.preSalePercentage + this.liquidityPercentage;
+    //   },
+    // },
+    // allocations: {
+    //   handler: function () {
+    //     if (this.totalSupply <= 0) return;
+    //
+    //     let allocationsPercentage = 0;
+    //     for (let i = 0; i < this.allocations.length; i++) {
+    //       allocationsPercentage += (100 * this.allocations[i].amount) / this.totalSupply;
+    //       this.allocations[i].percentage = (100 * this.allocations[i].amount) / this.totalSupply;
+    //     }
+    //
+    //     this.allocationsPercentage = allocationsPercentage;
+    //   },
+    //   deep: true
+    // },
+    // allocationsPercentage: {
+    //   handler: function () {
+    //     this.progression = this.preSalePercentage + this.liquidityPercentage + this.allocationsPercentage;
+    //   }
+    // },
     tokenPriceETH: {
       handler: async function () {
         if (this.tokenPriceETH > 0) {

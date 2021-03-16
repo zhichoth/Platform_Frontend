@@ -134,10 +134,11 @@ export default {
       locked: false,
       permaBurn: false,
       timeLocked: false,
+      releaseDate: null,
       interval: false,
       intervalStartDate: null,
-      releaseDate: null,
       intervalInDays: null,
+      intervalPercentage: null,
     },
     tokenomics: [],
     socials: [
@@ -216,21 +217,32 @@ export default {
       const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
       presaleContractInterface.options.address = process.env.VUE_APP_PRESALE_CONTRACT;
 
-
       const softCap = web3.utils.toWei(this.settings.softcap, 'ether');
       const hardCap = web3.utils.toWei(this.settings.hardcap, 'ether');
 
       let liqTokenAllocation = {};
       if (!this.liquidity.permaBurn) {
+        let timeLockedReleaseDate = 1;
+        let intervalReleaseDate = 0;
+        let intervalPrecentage = 0;
+        let intervalOfRelease = 0;
+        if (this.liquidity.limeLocked) {
+          timeLockedReleaseDate = new Date(this.liquidity.releaseDate);
+        } else if (this.liquidity.interval) {
+          intervalReleaseDate = new Date(this.liquidity.intervalStartDate);
+          intervalOfRelease = this.liquidity.intervalInDays;
+          intervalPrecentage = this.liquidity.intervalPercentage;
+        }
+
         liqTokenAllocation = {
           Name: `${this.settings.name}-liquidity-tokens`,
           Amount: 0, // not relevant
           RemainingAmount: 0, // not relevant
-          ReleaseDate: 1, //TODO
-          InvervalReleaseStart: 1, //TODO
+          ReleaseDate: timeLockedReleaseDate,
+          InvervalReleaseStart: intervalReleaseDate,
           IsInterval: this.liquidity.interval,
-          PercentageOfRelease: 1, //TODO
-          IntervalOfRelease: 0, //TODO
+          PercentageOfRelease: intervalPrecentage,
+          IntervalOfRelease: intervalOfRelease,
           Exists: true,
           Token: process.env.VUE_APP_CONTRACT_ADDRESS //not relevant
         };

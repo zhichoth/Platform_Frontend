@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard" v-if="isLoaded" class="h-full">
+  <div id="dashboard" v-if="isLoaded" class="h-vh">
     <transition name="slide-fade">
       <main v-if="isLoaded" class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
         <Header 

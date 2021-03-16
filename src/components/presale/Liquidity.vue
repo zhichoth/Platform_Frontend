@@ -80,7 +80,7 @@
                      v-model="liquidity.releaseDate">
             </label>
           </div>
-          <div v-if="liquidity.interval" class="grid grid-cols-2 gap-4">
+          <div v-if="liquidity.interval" class="grid grid-cols-3 gap-4">
             <div class="col-span-1">
               <label
                   :for="liquidity.intervalStartDate"
@@ -101,6 +101,17 @@
                      placeholder="Interval in days"
                      class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
                      v-model="liquidity.intervalInDays">
+            </div>
+            <div class="col-span-1">
+              <label
+                  :for="liquidity.intervalPercentage"
+                  class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                Interval
+              </label>
+              <input type="number"
+                     placeholder="Interval in days"
+                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                     v-model="liquidity.intervalPercentage">
             </div>
           </div>
         </div>

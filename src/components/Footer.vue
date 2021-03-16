@@ -22,9 +22,6 @@
           <p class="text-lefttext-base text-gray-400">
             &copy; {{ new Date().getFullYear() }} YearnSecure, Inc. All rights reserved.
           </p>
-          <p class="text-left text-base text-gray-400">
-            Buy our developers a 🍺: <a href="https://etherscan.io/address/0xC71027107855a2C6625e27944b8aFC594c5c01C5" target="_blank" class="text-blue-500 hover:text-yellow-600 transiation duration-300">0xC71027107855a2C6625e27944b8aFC594c5c01C5</a>
-          </p>
         </div>
       </div>
     </footer>

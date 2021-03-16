@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     account: '',
     presale: {},
+    pinnedPresales: [],
   },
   getters: {
     account: state => {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     presale: state => {
       return state.presale
+    },
+    pinnedPresales: state => {
+      return state.pinnedPresales
     }
   },
   mutations: {

@@ -179,7 +179,6 @@ export default {
     getContractData: async function () {
       const response = await axios.get(`https://api.etherscan.io/api?module=contract&action=getabi&address=${process.env.VUE_APP_CONTRACT_ADDRESS}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`);
       const result = JSON.parse(response.data.result);
-
       const web3 = new Web3(this.provider);
 
       const contract = {
@@ -188,7 +187,7 @@ export default {
         endpoint: `https://api.etherscan.io/api?module=contract&action=getabi&address=${process.env.VUE_APP_STAKE_CONTRACT}&apikey=${process.env.VUE_APP_ETHERSCAN_API}`,
       };
 
-      const contractInterface = new web3.eth.Contract(contract.abi)
+      const contractInterface = new web3.eth.Contract(contract.abi);
       contractInterface.options.address = process.env.VUE_APP_CONTRACT_ADDRESS;
 
       await this.getTotalYsecStaked(contractInterface);
@@ -197,7 +196,7 @@ export default {
       this.getEstReward();
     },
     getTotalYsecStaked: async function (contractInterface) {
-      console.log(contractInterface.methods)
+      console.log(contractInterface)
       // this.yieldPool.totalYsecStaked = await contractInterface.methods.stakedBalance().call();
       // this.yieldPool.totalYsecStaked = await contractInterface.methods.stakedTotal().call();
       this.yieldPool.totalYsecStaked = await contractInterface.methods.totalSupply().call();

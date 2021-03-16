@@ -141,7 +141,7 @@ export default {
   mounted: async function () {
     // IsBusy
     // this.$emit('toggleIsBusy', true);
-
+    this.isLoaded = true;
     if (this.account === '') {
       // Detect provider
       await this.detectProvider();
@@ -150,7 +150,6 @@ export default {
       // Read contract data
       await this.getContractData();
     }
-    this.isLoaded = true;
 
     // IsBusy
     // this.$emit('toggleIsBusy', false);

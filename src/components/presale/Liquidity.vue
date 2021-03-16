@@ -22,16 +22,21 @@
           </div>
           <div class="block mt-4">
             <label
-                :for="liquidity.precentage"
+                :for="liquidity.percentage"
                 class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
               Token liquidity precentage
             </label>
             <div class="mt-1 flex rounded-md">
               <input
                   type="number"
-                  v-model="liquidity.precentage"
+                  v-model="liquidity.percentage"
                   placeholder="Precentage of raised ETH that will be added as liquidity"
                   class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+            </div>
+            <div v-if="tokensPerEth" class="block mt-5 text-left">
+            <span class="text-white">
+              {{tokensPerEth}}
+            </span>
             </div>
           </div>
           <div class="mx-auto w-1/2 mt-4">
@@ -106,10 +111,10 @@
               <label
                   :for="liquidity.intervalPercentage"
                   class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                Interval
+                Interval percentage
               </label>
               <input type="number"
-                     placeholder="Interval in days"
+                     placeholder="Interval percentage"
                      class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
                      v-model="liquidity.intervalPercentage">
             </div>
@@ -124,8 +129,10 @@ export default {
   name: 'presale.Liquidity.components',
   props: {
     liquidity: Object,
+    hardCap: String,
   },
   data: () => ({
+    tokensPerEth: null,
     error: {
 
     }
@@ -143,6 +150,12 @@ export default {
           this.liquidity.interval = false;
         } else if (this.liquidity.locked) {
           this.liquidity.permaBurn = false;
+        }
+
+        if (this.hardCap !== null && this.liquidity.amount !== null && this.liquidity.percentage !== null) {
+          const liquidityPercentage = Number(this.hardCap) / this.liquidity.percentage * 100;
+          const tokenLiqAmount = this.liquidity.amount / liquidityPercentage;
+          this.tokensPerEth = `${tokenLiqAmount} tokens per ETH`
         }
       },
       deep: true

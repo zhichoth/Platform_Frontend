@@ -43,6 +43,7 @@
               <PresaleInformation
                 :account="account"
                 :token="settings"
+                :key="key"
               />
             </div>
             <hr>
@@ -50,6 +51,8 @@
             <div class="my-8 text-center">
               <Liquidity
                   :liquidity="liquidity"
+                  :hardCap="settings.hardcap"
+                  :key="key"
               />
             </div>
             <hr>
@@ -60,6 +63,8 @@
                   :liquidity="liquidity"
                   :chartData="chartData"
                   :options="chartDataOptions"
+                  @setAllocations="setAllocations"
+                  :key="key"
               />
             </div>
             <hr>
@@ -69,10 +74,11 @@
                   :socials="socials"
                   @addSocials="addSocials"
                   @deleteSocial="deleteSocial"
+                  :key="key"
               />
             </div>
             <hr>
-            <div class="my-8 text-center">
+            <div v-if="setAllocationsPressed" class="my-8 text-center">
               <button v-on:click="createPresale" class="bg-yellow-500 py-2 px-4 rounded text-white hover:bg-yellow-600">
                 Create Presale
               </button>
@@ -121,18 +127,18 @@ export default {
     chainId: null,
     settings: {
       address: '0x9C71795C559aaf3c423b8D743545741e2565c985',
-      name: '',
-      softcap: null,
-      hardcap: null,
-      tokenPresaleAllocation: null,
+      name: 'Presalelaunch',
+      softcap: "300",
+      hardcap: "750",
+      tokenPresaleAllocation: 500000,
       startDate: new Date(),
       endDate: new Date(),
     },
     liquidity: {
-      amount: null,
-      precentage: null,
+      amount: 650000,
+      percentage: 10,
       locked: false,
-      permaBurn: false,
+      permaBurn: true,
       timeLocked: false,
       releaseDate: null,
       interval: false,
@@ -141,9 +147,10 @@ export default {
       intervalPercentage: null,
     },
     tokenomics: [],
+    setAllocationsPressed: false,
     socials: [
       {
-        url: ''
+        url: 'https://www.example.com'
       },
     ],
     chartData: {
@@ -179,17 +186,21 @@ export default {
       title: '',
       msg: ''
     },
+    key: 0,
     contractAbi: [{"inputs":[{"internalType":"address","name":"timelockFactoryAddress","type":"address"},{"internalType":"address","name":"yieldFeeAddress","type":"address"},{"internalType":"address","name":"feeAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"address","name":"claimer","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ClaimedTokens","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"address","name":"contributor","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Contributed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"address","name":"reciever","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EthDistributed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"address","name":"reciever","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EthFeeDistributed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"address","name":"reciever","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EthYieldFeeDistributed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"address","name":"contributor","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"RetrievedEth","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"RetrievedTokens","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensTransfered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensTransferedToLocks","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"presaleId","type":"uint256"},{"indexed":false,"internalType":"bool","name":"permaLockedLiq","type":"bool"},{"indexed":false,"internalType":"uint256","name":"amountOfEth","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amountOfTokens","type":"uint256"}],"name":"UniswapLiquidityAdded","type":"event"},{"inputs":[],"name":"FeeAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"PresaleIndexer","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"Presales","outputs":[{"components":[{"internalType":"string","name":"Name","type":"string"},{"internalType":"string","name":"Website","type":"string"},{"internalType":"string","name":"Telegram","type":"string"},{"internalType":"string","name":"Twitter","type":"string"},{"internalType":"string","name":"Discord","type":"string"}],"internalType":"struct PresaleInfo","name":"Info","type":"tuple"},{"internalType":"uint256","name":"StartDate","type":"uint256"},{"internalType":"uint256","name":"EndDate","type":"uint256"},{"internalType":"uint256","name":"Softcap","type":"uint256"},{"internalType":"uint256","name":"Hardcap","type":"uint256"},{"internalType":"uint256","name":"TokenLiqAmount","type":"uint256"},{"internalType":"uint256","name":"LiqPercentage","type":"uint256"},{"internalType":"uint256","name":"TokenPresaleAllocation","type":"uint256"},{"internalType":"bool","name":"PermalockLiq","type":"bool"},{"components":[{"internalType":"string","name":"Name","type":"string"},{"internalType":"uint256","name":"Amount","type":"uint256"},{"internalType":"uint256","name":"RemainingAmount","type":"uint256"},{"internalType":"uint256","name":"ReleaseDate","type":"uint256"},{"internalType":"bool","name":"IsInterval","type":"bool"},{"internalType":"uint256","name":"PercentageOfRelease","type":"uint256"},{"internalType":"uint256","name":"IntervalOfRelease","type":"uint256"},{"internalType":"bool","name":"Exists","type":"bool"},{"internalType":"address","name":"Token","type":"address"}],"internalType":"struct TokenAllocation","name":"LiquidityTokenAllocation","type":"tuple"},{"components":[{"internalType":"address","name":"TokenOwnerAddress","type":"address"},{"internalType":"address","name":"TokenAddress","type":"address"},{"internalType":"address","name":"TokenTimeLock","type":"address"}],"internalType":"struct PresaleDataAddresses","name":"Addresses","type":"tuple"},{"components":[{"internalType":"uint256","name":"TotalTokenAmount","type":"uint256"},{"internalType":"uint256","name":"Step","type":"uint256"},{"internalType":"uint256","name":"ContributedEth","type":"uint256"},{"internalType":"uint256","name":"RaisedFeeEth","type":"uint256"},{"internalType":"bool","name":"Exists","type":"bool"},{"internalType":"uint256","name":"RetrievedTokenAmount","type":"uint256"},{"internalType":"uint256","name":"RetrievedEthAmount","type":"uint256"},{"internalType":"uint256","name":"NumberOfContributors","type":"uint256"}],"internalType":"struct PresaleDataState","name":"State","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"TimelockFactoryAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"YieldFeeAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"timelockFactoryAddress","type":"address"}],"name":"SetTimelockFactory","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"yieldFeeAddress","type":"address"}],"name":"SetYieldFeeAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"feeAddress","type":"address"}],"name":"SetFeeAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"string","name":"Name","type":"string"},{"internalType":"uint256","name":"StartDate","type":"uint256"},{"internalType":"uint256","name":"EndDate","type":"uint256"},{"internalType":"uint256","name":"Softcap","type":"uint256"},{"internalType":"uint256","name":"Hardcap","type":"uint256"},{"internalType":"uint256","name":"TokenLiqAmount","type":"uint256"},{"internalType":"uint256","name":"LiqPercentage","type":"uint256"},{"internalType":"uint256","name":"TokenPresaleAllocation","type":"uint256"},{"internalType":"bool","name":"PermalockLiq","type":"bool"},{"components":[{"internalType":"string","name":"Name","type":"string"},{"internalType":"uint256","name":"Amount","type":"uint256"},{"internalType":"uint256","name":"RemainingAmount","type":"uint256"},{"internalType":"uint256","name":"ReleaseDate","type":"uint256"},{"internalType":"bool","name":"IsInterval","type":"bool"},{"internalType":"uint256","name":"PercentageOfRelease","type":"uint256"},{"internalType":"uint256","name":"IntervalOfRelease","type":"uint256"},{"internalType":"bool","name":"Exists","type":"bool"},{"internalType":"address","name":"Token","type":"address"}],"internalType":"struct TokenAllocation[]","name":"TokenAllocations","type":"tuple[]"},{"components":[{"internalType":"string","name":"Name","type":"string"},{"internalType":"uint256","name":"Amount","type":"uint256"},{"internalType":"uint256","name":"RemainingAmount","type":"uint256"},{"internalType":"uint256","name":"ReleaseDate","type":"uint256"},{"internalType":"bool","name":"IsInterval","type":"bool"},{"internalType":"uint256","name":"PercentageOfRelease","type":"uint256"},{"internalType":"uint256","name":"IntervalOfRelease","type":"uint256"},{"internalType":"bool","name":"Exists","type":"bool"},{"internalType":"address","name":"Token","type":"address"}],"internalType":"struct TokenAllocation","name":"LiquidityTokenAllocation","type":"tuple"},{"internalType":"address","name":"Token","type":"address"},{"internalType":"string","name":"Website","type":"string"},{"internalType":"string","name":"Telegram","type":"string"},{"internalType":"string","name":"Twitter","type":"string"},{"internalType":"string","name":"Discord","type":"string"}],"internalType":"struct PresaleSettings","name":"settings","type":"tuple"}],"name":"CreatePresale","outputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"TransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"Contribute","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"},{"internalType":"address","name":"contributor","type":"address"}],"name":"RetrieveEth","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"RetrieveTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"TransferTokensToLocks","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"AddUniswapLiquidity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"ClaimTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"DistributeEth","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"PresaleStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"PresaleFinished","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"SoftcapMet","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"HardcapMet","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PresaleIndexerLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"EthDistributable","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"GetTokenAllocations","outputs":[{"components":[{"internalType":"string","name":"Name","type":"string"},{"internalType":"uint256","name":"Amount","type":"uint256"},{"internalType":"uint256","name":"RemainingAmount","type":"uint256"},{"internalType":"uint256","name":"ReleaseDate","type":"uint256"},{"internalType":"bool","name":"IsInterval","type":"bool"},{"internalType":"uint256","name":"PercentageOfRelease","type":"uint256"},{"internalType":"uint256","name":"IntervalOfRelease","type":"uint256"},{"internalType":"bool","name":"Exists","type":"bool"},{"internalType":"address","name":"Token","type":"address"}],"internalType":"struct TokenAllocation[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"},{"internalType":"address","name":"forAddress","type":"address"}],"name":"GetEthContributedForAddress","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"},{"internalType":"address","name":"forAddress","type":"address"}],"name":"GetAmountOfTokensForAddress","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"},{"internalType":"address","name":"forAddress","type":"address"}],"name":"GetHardcapAmountOfTokensForAddress","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"GetRatio","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"presaleId","type":"uint256"}],"name":"GetNumberOfContributors","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
   }),
-  beforeMount: async function() {
-    if (this.$store.getters.account !== '') {
-      this.account = this.$store.getters.account;
-      this.chainId = this.provider.chainId;
-      this.isConnected = true;
+  mounted: async function () {
+    if (this.provider === undefined) {
+      this.isLoaded = true;
     }
-  },
-  mounted: function () {
-    this.isLoaded = true;
+
+    if (!this.isLoaded) {
+      // Detect provider
+      await this.detectProvider();
+      // Connect to your account
+      await this.currentAccount();
+      this.isLoaded = true;
+    }
 
     for (let index = 0; index < 4; index++) {
       this.chartData.datasets[0].data.push(Number(25));
@@ -211,6 +222,11 @@ export default {
       if (this.socials.length > 1)
         this.socials.splice(key, 1);
     },
+    setAllocations: function(allocations) {
+      this.tokenomics = allocations;
+
+      this.setAllocationsPressed = true;
+    },
     createPresale: async function () {
       const presaleContractAbi = this.contractAbi;
       const web3 = new Web3(this.provider);
@@ -220,33 +236,9 @@ export default {
       const softCap = web3.utils.toWei(this.settings.softcap, 'ether');
       const hardCap = web3.utils.toWei(this.settings.hardcap, 'ether');
 
-      let liqTokenAllocation = {};
-      if (!this.liquidity.permaBurn) {
-        let timeLockedReleaseDate = 1;
-        let intervalReleaseDate = 0;
-        let intervalPrecentage = 0;
-        let intervalOfRelease = 0;
-        if (this.liquidity.limeLocked) {
-          timeLockedReleaseDate = new Date(this.liquidity.releaseDate);
-        } else if (this.liquidity.interval) {
-          intervalReleaseDate = new Date(this.liquidity.intervalStartDate);
-          intervalOfRelease = this.liquidity.intervalInDays;
-          intervalPrecentage = this.liquidity.intervalPercentage;
-        }
+      const liqTokenAllocation = this.addLiquidityAllocation();
 
-        liqTokenAllocation = {
-          Name: `${this.settings.name}-liquidity-tokens`,
-          Amount: 0, // not relevant
-          RemainingAmount: 0, // not relevant
-          ReleaseDate: timeLockedReleaseDate,
-          InvervalReleaseStart: intervalReleaseDate,
-          IsInterval: this.liquidity.interval,
-          PercentageOfRelease: intervalPrecentage,
-          IntervalOfRelease: intervalOfRelease,
-          Exists: true,
-          Token: process.env.VUE_APP_CONTRACT_ADDRESS //not relevant
-        };
-      }
+      const tokenAllocations = this.addTokenAllocation();
 
       const presaleDto = {
         Token: this.settings.address,
@@ -257,22 +249,10 @@ export default {
         Hardcap: `${hardCap}`,
         TokenPresaleAllocation: `${this.settings.tokenPresaleAllocation}`,
         TokenLiqAmount: `${this.liquidity.amount}`,
-        LiqPercentage: `${this.liquidity.precentage}`,
+        LiqPercentage: `${this.liquidity.percentage}`,
         PermalockLiq: this.liquidity.permaBurn,
         LiquidityTokenAllocation: liqTokenAllocation,
-        //MOCKED DATA
-        TokenAllocations:[{
-          Name:"test",
-          Amount:1,
-          RemainingAmount:1,
-          ReleaseDate:1,
-          InvervalReleaseStart:1,
-          IsInterval:false,
-          PercentageOfRelease:1,
-          IntervalOfRelease:1,
-          Exists:true,
-          Token: this.settings.address,
-        }],
+        TokenAllocations: tokenAllocations,
         // SOCIALS WILL CHANGE TO
         Website: this.socials[0].url,
         Telegram: this.socials[0].url,
@@ -281,16 +261,154 @@ export default {
       }
 
       console.log(presaleDto);
-console.log(this.account)
       if (this.account !== null && this.account !== '') {
-        await presaleContractInterface.methods.CreatePresale(presaleDto)
-            .send({from: this.account})
-            .then((response) => {
-              console.log(response)
-            })
-            .catch((e) => {
-              console.log('error:' + e);
-            });
+        await this.sendPresaleToContract(presaleContractInterface, presaleDto);
+      }
+    },
+    addLiquidityAllocation: function() {
+      let timeLockedReleaseDate = 0;
+      let intervalReleaseDate = 0;
+      let intervalPercentage = 0;
+      let intervalOfRelease = 0;
+      if (!this.liquidity.permaBurn) {
+        if (this.liquidity.locked && this.liquidity.timeLocked) {
+          timeLockedReleaseDate = new Date(this.liquidity.releaseDate).getTime();
+        } else if (this.liquidity.interval) {
+          intervalReleaseDate = new Date(this.liquidity.intervalStartDate).getTime();
+          intervalOfRelease = this.liquidity.intervalInDays;
+          intervalPercentage = this.liquidity.intervalPercentage;
+        }
+      }
+
+      return {
+        Name: `${this.settings.name}-liquidity-tokens`,
+        Amount: 0, // not relevant
+        RemainingAmount: 0, // not relevant
+        ReleaseDate: timeLockedReleaseDate,
+        IntervalReleaseStart: intervalReleaseDate,
+        IsInterval: this.liquidity.interval,
+        PercentageOfRelease: intervalPercentage,
+        IntervalOfRelease: intervalOfRelease,
+        Exists: true,
+        Token: process.env.VUE_APP_CONTRACT_ADDRESS //not relevant
+      };
+    },
+    addTokenAllocation: function() {
+      const tokenAllocations = [];
+      for (let i = 0; i < this.tokenomics.length; i++) {
+        const allocation = this.tokenomics[i];
+        if (allocation.name !== '' && allocation.amount !== null) {
+          if (allocation.interval) {
+            const dto = {
+              Name: allocation.name,
+              Amount: allocation.amount,
+              RemainingAmount: 0,//TODO
+              ReleaseDate: 1,
+              IsInterval: allocation.interval,
+              IntervalReleaseStart: new Date(allocation.intervalStartDate).getTime(),
+              IntervalOfRelease: allocation.intervalInDays,
+              PercentageOfRelease: allocation.intervalPercentage,
+              Exists: true,
+              Token: this.settings.address
+            }
+            tokenAllocations.push(dto);
+          } else {
+            const dto = {
+              Name: allocation.name,
+              Amount: allocation.amount,
+              RemainingAmount: 0,//TODO
+              ReleaseDate: new Date(allocation.releaseDate).getTime(),
+              IsInterval: allocation.interval,
+              IntervalReleaseStart: 0,
+              IntervalOfRelease: 0,
+              PercentageOfRelease: 0,
+              Exists: true,
+              Token: this.settings.address
+            }
+            tokenAllocations.push(dto);
+          }
+        }
+      }
+
+      return tokenAllocations;
+    },
+    sendPresaleToContract: async function(presaleContractInterface, presaleDto) {
+      // this.$loading(true);
+      await presaleContractInterface.methods.CreatePresale(presaleDto)
+        .send({from: this.account})
+        .then((response) => {
+          if (response.status && response.blockHash !== '') {
+            console.log(response);
+            this.key++; // update components
+
+            this.$notifications(
+                'Presale successfully created',
+                `https://ropsten.etherscan.io/tx/${response.transactionHash}`,
+                0, // success
+                true);
+
+            this.$loading(false);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$notifications(
+              'Something went wrong creating the presale',
+              'Lorem ipsum',
+              1, // error
+              true);
+
+          this.$loading(false);
+        });
+    },
+    detectProvider: async function () {
+      // Great change MetaMask is not installed
+      if (this.provider === undefined) {
+        return this.showError(
+            'unexpected error',
+            'It looks like the connection to the MetaMask wallet failed. Try connecting again.',
+            false,
+            true);
+      }
+
+      if (!this.provider.isMetaMask)
+        this.$notifications(
+            'METAMASK not connected',
+            'Please connect your METAMASK',
+            1, // error
+            true);
+    },
+    currentAccount: async function () {
+      // connect to MetaMask account
+      this.chainId = this.provider.chainId;
+      this.provider
+          .request({ method: 'eth_accounts' })
+          .then(this.handleAccountsChanged(this.provider._state.accounts))
+          .catch(() => {
+            // Some unexpected error.
+            // For backwards compatibility reasons, if no accounts are available,
+            // eth_accounts will return an empty array.
+            this.$notifications(
+                'METAMASK not connected',
+                'Please connect your METAMASK',
+                1, // error
+                true);
+          });
+    },
+    handleAccountsChanged: function (accounts) {
+      if (accounts !== null && accounts.length === 0) {
+        // MetaMask is locked or the user has not connected any accounts
+        this.isConnected = false;
+        this.$notifications(
+            'No connections made\'',
+            'Click the connect button to connect your MetaMask account',
+            1, // error
+            true);
+      } else {
+        this.$store.state.account = accounts[0];
+        this.account = accounts[0];
+        // show user that MetaMask is connected
+        this.isConnected = true;
       }
     }
   },

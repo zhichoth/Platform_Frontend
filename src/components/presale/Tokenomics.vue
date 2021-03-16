@@ -56,7 +56,7 @@
                   </label>
                 </div>
                 <div class="block w-full" v-if="allocation.interval">
-                  <div class="grid grid-cols-2 gap-4">
+                  <div class="grid grid-cols-3 gap-4">
                     <div class="col-span-1">
                         <label
                             :for="allocation.intervalStartDate"
@@ -78,15 +78,34 @@
                              class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
                              v-model="allocation.intervalInDays">
                     </div>
+                    <div class="col-span-1">
+                      <label
+                          :for="allocation.intervalPercentage"
+                          class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Interval percentage
+                      </label>
+                      <input type="number"
+                             placeholder="Interval percentage"
+                             class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
+                             v-model="allocation.intervalPercentage">
+                    </div>
                   </div>
                 </div>
               </div>
               <div v-if="totalPercentage < 100" class="block mt-5">
                 <div>
-                    <button v-on:click="addAllocation" class="flex py-2 px-4 m-auto rounded bg-yellow-500 hover:bg-yellow-600">
-                      <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                      <span class="flex pl-3 text-white">Add allocation</span>
+                    <button
+                        v-on:click="addAllocation"
+                        class="flex py-2 px-4 m-auto rounded bg-gray-800 border-white text-white border hover:text-yellow-500 hover:border-yellow-500">
+                      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                      <span class="flex pl-3">Add allocation</span>
                     </button>
+                </div>
+
+                <div class="block mt-10">
+                  <button v-on:click="setAllocations" class="flex py-2 px-4 m-auto rounded bg-yellow-500 hover:bg-yellow-600">
+                    <span class="flex pl-3 text-white">Set Allocations</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -117,14 +136,16 @@ export default {
     totalPercentage: 0,
     allocations: [
       {
-        amount: null,
         name: '',
+        amount: null,
+        remainingAmount: null,
         timelocked: false,
-        style: 0,
         releaseDate: null,
         interval: false,
         intervalStartDate: null,
+        intervalPercentage: null,
         intervalInDays: null,
+        exists: true,
       }
     ],
     backgroundColors: [
@@ -139,45 +160,56 @@ export default {
       tokenAddress: '',
       tokenName: '',
       companyName: ''
-    }
+    },
+    showSetButton: true,
   }),
   methods: {
     addAllocation: function() {
-      const allocation = {
-        amount: null,
+      const emptyAllocation = {
         name: '',
+        amount: null,
+        remainingAmount: null,
         timelocked: false,
-        permanent: false,
-        releaseData: null,
+        releaseDate: null,
+        interval: false,
         intervalStartDate: null,
+        intervalPercentage: null,
         intervalInDays: null,
+        exists: true,
       }
-      this.allocations.push(allocation);
+      this.allocations.push(emptyAllocation);
+    },
+    setAllocations: function() {
+      // TODO
+      // calculate chart
+
+      this.showSetButton = false;
+      this.$emit('setAllocations', this.allocations);
     },
   },
   watch: {
-    allocations: {
-      handler() {
-        // let counter = 0;
-        let percentage = 0;
-        this.allocations.forEach(allocation => {
-          // console.log(this.totalPercentage);
-          percentage += allocation.amount / this.liquidity.amount * 100;
-          console.log(percentage);
-          // if (this.totalPercentage !== 100 && this.totalPercentage < 100 && (this.totalPercentage + Number(allocation.amount) <= 100)) {
-          //   this.totalPercentage += Number(allocation.amount);
-          //
-          //   allocation.style = `width: ${allocation.amount}%; background-color: ${this.backgroundColors[counter]}`;
-          //   counter++;
-          //
-          //   // Add allocation
-          // }
-          // this.totalPercentage = 0;
-        });
-        console.log(percentage);
-      },
-      deep: true
-    }
+    // allocations: {
+    //   handler() {
+    //     // let counter = 0;
+    //     let percentage = 0;
+    //     this.allocations.forEach(allocation => {
+    //       console.log(this.totalPercentage);
+    //       percentage += allocation.amount / this.liquidity.amount * 100;
+    //       console.log(percentage);
+    //       if (this.totalPercentage !== 100 && this.totalPercentage < 100 && (this.totalPercentage + Number(allocation.amount) <= 100)) {
+    //         this.totalPercentage += Number(allocation.amount);
+    //
+    //         allocation.style = `width: ${allocation.amount}%; background-color: ${this.backgroundColors[counter]}`;
+    //         counter++;
+    //
+    //       //   // Add allocation
+    //       }
+    //       this.totalPercentage = 0;
+    //     });
+    //     console.log(percentage);
+    //   },
+    //   deep: true
+    // }
   }
 }
 </script>

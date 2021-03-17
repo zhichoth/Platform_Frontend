@@ -63,6 +63,9 @@
                   :liquidity="liquidity"
                   :chartData="chartData"
                   :options="chartDataOptions"
+                  :remainingAmount="remainingAmount"
+                  :totalTokens="settings.totalTokens"
+                  :setAllocationsPressed="setAllocationsPressed"
                   @setAllocations="setAllocations"
                   :key="key"
               />
@@ -130,12 +133,13 @@ export default {
       name: 'Presalelaunch',
       softcap: "300",
       hardcap: "750",
-      tokenPresaleAllocation: 500000,
+      totalTokens: 1000000,
+      tokenPresaleAllocation: 200000,
       startDate: new Date(),
       endDate: new Date(),
     },
     liquidity: {
-      amount: 650000,
+      amount: 65000,
       percentage: 10,
       locked: false,
       permaBurn: true,
@@ -146,6 +150,7 @@ export default {
       intervalInDays: null,
       intervalPercentage: null,
     },
+    remainingAmount: null,
     tokenomics: [],
     setAllocationsPressed: false,
     socials: [
@@ -166,7 +171,8 @@ export default {
             '#f9b761',
           ],
         }
-      ]
+      ],
+      labels: []
     },
     chartDataOptions: {
       responsive: true,
@@ -201,20 +207,8 @@ export default {
       await this.currentAccount();
       this.isLoaded = true;
     }
-
-    for (let index = 0; index < 4; index++) {
-      this.chartData.datasets[0].data.push(Number(25));
-    }
   },
   methods: {
-    // addAllocation: function () {
-    //   const allocation = {
-    //     name: '',
-    //     amount: null,
-    //     percentage: 0,
-    //   }
-    //   this.allocations.push(allocation);
-    // },
     addSocials: function() {
       this.socials.push({type: 4, url:''});
     },
@@ -224,6 +218,19 @@ export default {
     },
     setAllocations: function(allocations) {
       this.tokenomics = allocations;
+
+      this.tokenomics.forEach((allocation) => {
+        if (Number(allocation.percentage) > 0)
+          this.chartData.labels.push(allocation.name);
+          this.chartData.datasets[0].data.push(Number(allocation.percentage));
+      });
+
+      this.chartData.labels.push('Presale');
+      const presaleAllocationPercentage = this.settings.tokenPresaleAllocation / this.settings.totalTokens * 100;
+      this.chartData.datasets[0].data.push(Number(presaleAllocationPercentage));
+      this.chartData.labels.push('Liquidity');
+      const liquidityPercentage = this.liquidity.amount / this.settings.totalTokens * 100;
+      this.chartData.datasets[0].data.push(Number(liquidityPercentage));
 
       this.setAllocationsPressed = true;
     },
@@ -413,57 +420,16 @@ export default {
     }
   },
   watch: {
-    // progression: {
-    //   handler: function () {
-    //     if (this.progression === 100) {
-    //       this.showAddAllocationButton = false;
-    //     } else if (this.progression < 100) {
-    //       this.showAddAllocationButton = true;
-    //     } else if (this.progression > 100) {
-    //       this.showAddAllocationButton = false;
-    //       // TODO Presale is not valid.
-    //     }
-    //   }
-    // },
-    // preSaleTotal: {
-    //   handler: function (value) {
-    //     if (this.totalSupply <= 0) return;
-    //
-    //     this.preSalePercentage = (100 * value) / this.totalSupply;
-    //
-    //     this.progression = this.preSalePercentage + this.liquidityPercentage;
-    //   },
-    // },
-    // liquidityTotal: {
-    //   handler: function (value) {
-    //     if (this.totalSupply <= 0) return;
-    //
-    //     this.liquidityPercentage = (100 * value) / this.totalSupply;
-    //
-    //     this.progression = this.preSalePercentage + this.liquidityPercentage;
-    //   },
-    // },
-    // allocations: {
-    //   handler: function () {
-    //     if (this.totalSupply <= 0) return;
-    //
-    //     let allocationsPercentage = 0;
-    //     for (let i = 0; i < this.allocations.length; i++) {
-    //       allocationsPercentage += (100 * this.allocations[i].amount) / this.totalSupply;
-    //       this.allocations[i].percentage = (100 * this.allocations[i].amount) / this.totalSupply;
-    //     }
-    //
-    //     this.allocationsPercentage = allocationsPercentage;
-    //   },
-    //   deep: true
-    // },
-    // allocationsPercentage: {
-    //   handler: function () {
-    //     this.progression = this.preSalePercentage + this.liquidityPercentage + this.allocationsPercentage;
-    //   }
-    // },
+    liquidity: {
+      handler: function() {
+        if (this.liquidity.amount !== null) {
+          this.remainingAmount = (this.settings.totalTokens - this.settings.tokenPresaleAllocation - this.liquidity.amount);
+        }
+      },
+      deep: true
+    },
     tokenPriceETH: {
-      handler: async function () {
+      handler: async function() {
         if (this.tokenPriceETH > 0) {
           await axios.get(process.env.VUE_APP_KRAKEN_API).then(response => {
             this.tokenPriceDollar = (this.tokenPriceETH * Number(response.data.result.XETHZUSD.c[0]));

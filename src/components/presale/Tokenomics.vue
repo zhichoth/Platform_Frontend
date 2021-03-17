@@ -8,20 +8,23 @@
         <div class="grid grid-cols-3">
           <div class="col-span-2">
             <div class="relative text-center pt-1">
-              <div class="overflow-hidden h-5 text-center text-xs flex rounded bg-gray-400">
+              <span v-if="remainingTokens === 0 && !showRemainingTokens" class="block text-white w-full mt-2">
+                {{remainingAmount}} tokens remain
+              </span>
+              <span v-else class="block text-white w-full mt-2">
+                {{remainingTokens}} tokens remain
+              </span>
+              <div class="overflow-hidden h-5 mt-2 text-center text-xs flex rounded bg-gray-400">
                 <div v-for="(allocation, key) in allocations" :key="key" :style="allocation.style" class="h-5 shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center"></div>
               </div>
               <span class="block text-white w-full mt-2">
                 {{totalPercentage}}%
               </span>
-              <span class="block text-white w-full mt-2">
-                {{liquidity.amount}}
-              </span>
             </div>
 
             <div class="block mt-8">
               <div v-for="(allocation, key) in allocations" class="block" :key="key">
-                <div class="grid grid-cols-5 gap-4">
+                <div class="grid grid-cols-5 gap-4 mt-5">
                   <div class="col-span-2 text-left">
                     <label :for="allocation.name" class="text-white">Allocation</label>
                     <input type="text" v-model="allocation.name" placeholder="Name" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
@@ -101,7 +104,8 @@
                       <span class="flex pl-3">Add allocation</span>
                     </button>
                 </div>
-
+              </div>
+              <div class="block mt-5">
                 <div class="block mt-10">
                   <button v-on:click="setAllocations" class="flex py-2 px-4 m-auto rounded bg-yellow-500 hover:bg-yellow-600">
                     <span class="flex pl-3 text-white">Set Allocations</span>
@@ -110,7 +114,7 @@
               </div>
             </div>
           </div>
-          <div>
+          <div v-if="setAllocationsPressed">
             <Chart class="pl-10" style="height: 300px;" :chartData="chartData" :options="options" />
           </div>
         </div>
@@ -126,14 +130,19 @@ export default {
   props: {
     tokenomics: Array,
     liquidity: Object,
+    remainingAmount: Number,
+    setAllocationsPressed: Boolean,
     chartData: Object,
     options: Object,
+    totalTokens: Number,
   },
   components: {
     Chart,
   },
   data: () => ({
     totalPercentage: 0,
+    remainingTokens: 0,
+    showRemainingTokens: false,
     allocations: [
       {
         name: '',
@@ -176,6 +185,7 @@ export default {
         intervalPercentage: null,
         intervalInDays: null,
         exists: true,
+        percentage: 0,
       }
       this.allocations.push(emptyAllocation);
     },
@@ -188,28 +198,51 @@ export default {
     },
   },
   watch: {
-    // allocations: {
-    //   handler() {
-    //     // let counter = 0;
-    //     let percentage = 0;
-    //     this.allocations.forEach(allocation => {
-    //       console.log(this.totalPercentage);
-    //       percentage += allocation.amount / this.liquidity.amount * 100;
-    //       console.log(percentage);
-    //       if (this.totalPercentage !== 100 && this.totalPercentage < 100 && (this.totalPercentage + Number(allocation.amount) <= 100)) {
-    //         this.totalPercentage += Number(allocation.amount);
-    //
-    //         allocation.style = `width: ${allocation.amount}%; background-color: ${this.backgroundColors[counter]}`;
-    //         counter++;
-    //
-    //       //   // Add allocation
-    //       }
-    //       this.totalPercentage = 0;
-    //     });
-    //     console.log(percentage);
-    //   },
-    //   deep: true
-    // }
+    allocations: {
+      handler() {
+        let counter = 0;
+        let percentageBar = 0;
+        let spendTokens = 0;
+        let percentage = 0;
+        this.totalPercentage = 0;
+        this.allocations.forEach(allocation => {
+          if (allocation.name !== '' && allocation.amount !== null) {
+            percentageBar = allocation.amount / this.remainingAmount * 100;
+            spendTokens = this.remainingAmount / 100 * percentageBar;
+
+            if (counter === 0) {
+              this.remainingTokens = this.remainingAmount - Math.round(spendTokens);
+            }
+            else
+              this.remainingTokens = this.remainingTokens - Math.round(spendTokens);
+
+            if (this.remainingTokens < 0) {
+              allocation.amount = null;
+              this.remainingTokens = this.remainingAmount;
+              allocation.style = `width: ${0}%; background-color: ${this.backgroundColors[counter]}`;
+              return;
+            }
+
+            // percentage of remaining tokens
+            percentage = allocation.amount / this.remainingAmount * 100;
+
+            // percentage of total tokens
+            allocation.percentage = allocation.amount / this.totalTokens * 100;
+
+            if (this.totalPercentage <= 100) {
+              allocation.style = `width: ${percentageBar}%; background-color: ${this.backgroundColors[counter]}`;
+              this.totalPercentage += percentage;
+            }
+
+            counter++;
+          }
+        });
+
+        this.totalPercentage = Math.round(this.totalPercentage);
+        this.showRemainingTokens = this.totalPercentage === 100;
+      },
+      deep: true
+    }
   }
 }
 </script>

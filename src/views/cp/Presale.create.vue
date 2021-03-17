@@ -46,39 +46,71 @@
                 :key="key"
               />
             </div>
-            <hr>
 
             <div class="my-8 text-center">
               <Liquidity
+                  v-if="settingsIsValid"
                   :liquidity="liquidity"
                   :hardCap="settings.hardcap"
                   :key="key"
               />
+
+              <div v-if="!settingsIsValid">
+                <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
+                  Liquidity
+                </h1>
+                <NotCompleted
+                  class="mt-8"
+                  :message="missingMessage" />
+              </div>
+
             </div>
-            <hr>
 
             <div class="my-8 text-center">
               <Tokenomics
+                  v-if="liquidityIsValid"
                   :tokenomics="tokenomics"
                   :liquidity="liquidity"
                   :chartData="chartData"
                   :options="chartDataOptions"
+                  :remainingAmount="remainingAmount"
+                  :totalTokens="settings.totalTokens"
+                  :setAllocationsPressed="setAllocationsPressed"
                   @setAllocations="setAllocations"
                   :key="key"
               />
+
+              <div v-if="!liquidityIsValid && settingsIsValid">
+                <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
+                  Tokenomics
+                </h1>
+                <NotCompleted
+                    class="mt-8"
+                    :message="missingMessage" />
+              </div>
+
             </div>
-            <hr>
 
             <div class="my-8 text-center">
               <Socials
+                  v-if="tokenomicsIsValid"
                   :socials="socials"
                   @addSocials="addSocials"
                   @deleteSocial="deleteSocial"
                   :key="key"
               />
+
+              <div v-if="!tokenomicsIsValid && liquidityIsValid && settingsIsValid">
+                <h1 class="text-4xl font-extrabold text-gray-700 dark:text-gray-200">
+                  Socials
+                </h1>
+                <NotCompleted
+                    class="mt-8"
+                    :message="missingMessage" />
+              </div>
             </div>
-            <hr>
-            <div v-if="setAllocationsPressed" class="my-8 text-center">
+
+            <div v-if="setAllocationsPressed && presaleIsValid" class="my-8 text-center">
               <button v-on:click="createPresale" class="bg-yellow-500 py-2 px-4 rounded text-white hover:bg-yellow-600">
                 Create Presale
               </button>
@@ -101,6 +133,7 @@ import PresaleInformation from '@/components/presale/Information'
 import Liquidity from '@/components/presale/Liquidity'
 import Tokenomics from '@/components/presale/Tokenomics'
 import Socials from '@/components/presale/Socials'
+import NotCompleted from '@/components/presale/NotCompleted'
 import Web3 from "web3";
 
 export default {
@@ -115,6 +148,7 @@ export default {
     Liquidity,
     Tokenomics,
     Socials,
+    NotCompleted,
   },
   data: () => ({
     contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
@@ -126,19 +160,22 @@ export default {
     provider: window.ethereum,
     chainId: null,
     settings: {
-      address: '0x9C71795C559aaf3c423b8D743545741e2565c985',
-      name: 'Presalelaunch',
-      softcap: "300",
-      hardcap: "750",
-      tokenPresaleAllocation: 500000,
-      startDate: new Date(),
-      endDate: new Date(),
+      address: '',
+      name: '',
+      softcap: null,
+      hardcap: null,
+      totalTokens: null,
+      tokenPresaleAllocation: null,
+      startDate: null,
+      endDate: null,
     },
+    settingsIsValid: false,
+    liquidityIsValid: false,
     liquidity: {
-      amount: 650000,
-      percentage: 10,
+      amount: null,
+      percentage: null,
       locked: false,
-      permaBurn: true,
+      permaBurn: false,
       timeLocked: false,
       releaseDate: null,
       interval: false,
@@ -146,13 +183,18 @@ export default {
       intervalInDays: null,
       intervalPercentage: null,
     },
+    remainingAmount: null,
+    tokenomicsIsValid: false,
     tokenomics: [],
     setAllocationsPressed: false,
+    socialsIsValid: false,
     socials: [
       {
-        url: 'https://www.example.com'
+        url: ''
       },
     ],
+    presaleIsValid: false,
+    missingMessage: "Please fill in all the fields before you continue",
     chartData: {
       datasets: [
         {
@@ -166,7 +208,8 @@ export default {
             '#f9b761',
           ],
         }
-      ]
+      ],
+      labels: []
     },
     chartDataOptions: {
       responsive: true,
@@ -201,20 +244,8 @@ export default {
       await this.currentAccount();
       this.isLoaded = true;
     }
-
-    for (let index = 0; index < 4; index++) {
-      this.chartData.datasets[0].data.push(Number(25));
-    }
   },
   methods: {
-    // addAllocation: function () {
-    //   const allocation = {
-    //     name: '',
-    //     amount: null,
-    //     percentage: 0,
-    //   }
-    //   this.allocations.push(allocation);
-    // },
     addSocials: function() {
       this.socials.push({type: 4, url:''});
     },
@@ -225,7 +256,21 @@ export default {
     setAllocations: function(allocations) {
       this.tokenomics = allocations;
 
+      this.tokenomics.forEach((allocation) => {
+        if (Number(allocation.percentage) > 0)
+          this.chartData.labels.push(allocation.name);
+          this.chartData.datasets[0].data.push(Number(allocation.percentage));
+      });
+
+      this.chartData.labels.push('Presale');
+      const presaleAllocationPercentage = this.settings.tokenPresaleAllocation / this.settings.totalTokens * 100;
+      this.chartData.datasets[0].data.push(Number(presaleAllocationPercentage));
+      this.chartData.labels.push('Liquidity');
+      const liquidityPercentage = this.liquidity.amount / this.settings.totalTokens * 100;
+      this.chartData.datasets[0].data.push(Number(liquidityPercentage));
+
       this.setAllocationsPressed = true;
+      this.tokenomicsIsValid = true;
     },
     createPresale: async function () {
       const presaleContractAbi = this.contractAbi;
@@ -260,7 +305,6 @@ export default {
         Discord: this.socials[0].url,
       }
 
-      console.log(presaleDto);
       if (this.account !== null && this.account !== '') {
         await this.sendPresaleToContract(presaleContractInterface, presaleDto);
       }
@@ -333,7 +377,7 @@ export default {
       return tokenAllocations;
     },
     sendPresaleToContract: async function(presaleContractInterface, presaleDto) {
-      // this.$loading(true);
+      this.$loading(true);
       await presaleContractInterface.methods.CreatePresale(presaleDto)
         .send({from: this.account})
         .then((response) => {
@@ -347,14 +391,15 @@ export default {
                 0, // success
                 true);
 
+            this.resetPage();
+
             this.$loading(false);
           }
         })
         .catch((e) => {
-          console.log(e);
           this.$notifications(
               'Something went wrong creating the presale',
-              'Lorem ipsum',
+              e.message,
               1, // error
               true);
 
@@ -410,60 +455,105 @@ export default {
         // show user that MetaMask is connected
         this.isConnected = true;
       }
+    },
+    resetPage: function() {
+      this.settings = {
+        address: '',
+        name: '',
+        softcap: null,
+        hardcap: null,
+        totalTokens: null,
+        tokenPresaleAllocation: null,
+        startDate: null,
+        endDate: null,
+      };
+
+      this.liquidity = {
+        amount: null,
+        percentage: null,
+        locked: false,
+        permaBurn: false,
+        timeLocked: false,
+        releaseDate: null,
+        interval: false,
+        intervalStartDate: null,
+        intervalInDays: null,
+        intervalPercentage: null,
+      };
+
+      this.tokenomics = [];
+      this.socials = [{url: ''}];
+
+      this.settingsIsValid = false;
+      this.liquidityIsValid = false;
+      this.tokenomicsIsValid = false;
+      this.socialsIsValid = false;
+      this.presaleIsValid = false;
     }
   },
   watch: {
-    // progression: {
-    //   handler: function () {
-    //     if (this.progression === 100) {
-    //       this.showAddAllocationButton = false;
-    //     } else if (this.progression < 100) {
-    //       this.showAddAllocationButton = true;
-    //     } else if (this.progression > 100) {
-    //       this.showAddAllocationButton = false;
-    //       // TODO Presale is not valid.
-    //     }
-    //   }
-    // },
-    // preSaleTotal: {
-    //   handler: function (value) {
-    //     if (this.totalSupply <= 0) return;
-    //
-    //     this.preSalePercentage = (100 * value) / this.totalSupply;
-    //
-    //     this.progression = this.preSalePercentage + this.liquidityPercentage;
-    //   },
-    // },
-    // liquidityTotal: {
-    //   handler: function (value) {
-    //     if (this.totalSupply <= 0) return;
-    //
-    //     this.liquidityPercentage = (100 * value) / this.totalSupply;
-    //
-    //     this.progression = this.preSalePercentage + this.liquidityPercentage;
-    //   },
-    // },
-    // allocations: {
-    //   handler: function () {
-    //     if (this.totalSupply <= 0) return;
-    //
-    //     let allocationsPercentage = 0;
-    //     for (let i = 0; i < this.allocations.length; i++) {
-    //       allocationsPercentage += (100 * this.allocations[i].amount) / this.totalSupply;
-    //       this.allocations[i].percentage = (100 * this.allocations[i].amount) / this.totalSupply;
-    //     }
-    //
-    //     this.allocationsPercentage = allocationsPercentage;
-    //   },
-    //   deep: true
-    // },
-    // allocationsPercentage: {
-    //   handler: function () {
-    //     this.progression = this.preSalePercentage + this.liquidityPercentage + this.allocationsPercentage;
-    //   }
-    // },
+    settings: {
+      handler: function() {
+        this.settingsIsValid = this.settings.address !== null &&
+            this.settings.name !== null &&
+            this.settings.softcap !== null &&
+            this.settings.hardcap !== null &&
+            this.settings.totalTokens !== null &&
+            this.settings.tokenPresaleAllocation !== null &&
+            this.settings.startDate !== null &&
+            this.settings.endDate !== null;
+      },
+      deep: true
+    },
+    liquidity: {
+      handler: function() {
+        if (this.liquidity.amount !== null) {
+          this.remainingAmount = (this.settings.totalTokens - this.settings.tokenPresaleAllocation - this.liquidity.amount);
+        }
+
+        if (this.liquidity.percentage !== null && this.liquidity.amount !== null) {
+          if (this.liquidity.permaBurn) {
+            // all values are filled so liquidity is valid
+            this.liquidityIsValid = true;
+          } else if (this.liquidity.locked && this.liquidity.timeLocked) {
+            // when timelocked is selected check releasedate
+            if (this.liquidity.releaseDate !== null)
+              this.liquidityIsValid = true;
+          } else if (this.liquidity.locked && this.liquidity.interval) {
+            // When interval is selected check interval values
+            if (this.liquidity.intervalStartDate !== null &&
+                this.liquidity.intervalInDays !== null &&
+                this.liquidity.intervalPercentage !== null) {
+              this.liquidityIsValid = true;
+            }
+          } else {
+            this.liquidityIsValid = false;
+          }
+        }
+      },
+      deep: true
+    },
+    socials: {
+      handler: function() {
+        if (this.socials.length > 0) {
+          for (let i = 0; i < this.socials.length; i++) {
+            if (this.socials[i].url !== '') {
+              this.socialsIsValid = true;
+            } else {
+              this.socialsIsValid = false;
+            }
+          }
+        }
+      },
+      deep: true
+    },
+    socialsIsValid: {
+      handler: function() {
+        this.presaleIsValid = this.socialsIsValid && this.settingsIsValid && this.liquidityIsValid && this.tokenomicsIsValid;
+      }
+    },
     tokenPriceETH: {
-      handler: async function () {
+      handler: async function() {
         if (this.tokenPriceETH > 0) {
           await axios.get(process.env.VUE_APP_KRAKEN_API).then(response => {
             this.tokenPriceDollar = (this.tokenPriceETH * Number(response.data.result.XETHZUSD.c[0]));

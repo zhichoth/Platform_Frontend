@@ -78,6 +78,20 @@
           </div>
           <div class="block mt-4">
             <label
+                :for="token.totalTokens"
+                class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+              Total tokens
+            </label>
+            <div class="mt-1 flex rounded-md">
+              <input
+                  type="number"
+                  v-model="token.totalTokens"
+                  placeholder="Token presale allocation"
+                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+            </div>
+          </div>
+          <div class="block mt-4">
+            <label
                 :for="token.tokenPresaleAllocation"
                 class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
               Token Presale Allocation

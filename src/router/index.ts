@@ -20,7 +20,7 @@ const routes: Array<RouteConfig> = [
     component: Yield
   },
   {
-    path: '/presale/create',
+    path: '/create/presale',
     name: 'presale.create',
     component: Presale
   },

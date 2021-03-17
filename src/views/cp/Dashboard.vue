@@ -84,7 +84,7 @@ export default {
   }),
   beforeMount: async function () {
     this.$loading(true);
-    await this.getPresales();
+    // await this.getPresales();
     await this.setPinnedPresales();
   },
   mounted: async function () {

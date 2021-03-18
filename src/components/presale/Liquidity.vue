@@ -33,10 +33,15 @@
                   placeholder="Precentage of raised ETH that will be added as liquidity"
                   class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
             </div>
-            <div v-if="tokensPerEth" class="block mt-5 text-left">
-            <span class="text-white">
-              {{tokensPerEth}}
-            </span>
+            <div v-if="tokensPerEthStr" class="block mt-5 text-left">
+              <span class="text-white">
+                {{tokensPerEthStr}}
+              </span>
+            </div>
+            <div v-if="listingPrice" class="block mt-5 text-left">
+              <span class="text-white">
+                {{listingPrice}}
+              </span>
             </div>
           </div>
           <div class="mx-auto w-1/2 mt-4">
@@ -111,7 +116,7 @@
               <label
                   :for="liquidity.intervalPercentage"
                   class="block text-left text-sm font-medium text-gray-700 dark:text-gray-200">
-                Interval percentage
+                Interval percentage {{ tokensPerEth }}
               </label>
               <input type="number"
                      placeholder="Interval percentage"
@@ -130,9 +135,11 @@ export default {
   props: {
     liquidity: Object,
     hardCap: String,
+    tokensPerEth: Number,
   },
   data: () => ({
-    tokensPerEth: null,
+    tokensPerEthStr: null,
+    listingPrice: null,
     error: {
 
     }
@@ -153,9 +160,12 @@ export default {
         }
 
         if (this.hardCap !== null && this.liquidity.amount !== null && this.liquidity.percentage !== null) {
-          const liquidityPercentage = Number(this.hardCap) / this.liquidity.percentage * 100;
+          const liquidityPercentage = Number(this.hardCap) / 100 * this.liquidity.percentage;
           const tokenLiqAmount = this.liquidity.amount / liquidityPercentage;
-          this.tokensPerEth = `${tokenLiqAmount} tokens per ETH`
+          this.tokensPerEthStr = `${tokenLiqAmount} tokens per ETH`;
+
+          const listingPrice = tokenLiqAmount / this.tokensPerEth;
+          this.listingPrice = `listing price is ${listingPrice} times presale price`;
         }
       },
       deep: true

@@ -105,13 +105,21 @@
                     </button>
                 </div>
               </div>
-              <div class="block mt-5">
+              <div v-if="showSetAllocationButton" class="block mt-5">
                 <div class="block mt-10">
                   <button v-on:click="setAllocations" class="flex py-2 px-4 m-auto rounded bg-yellow-500 hover:bg-yellow-600">
                     <span class="flex pl-3 text-white">Set Allocations</span>
                   </button>
                 </div>
               </div>
+              <div v-if="showResetAllocationsButton" class="block mt-5">
+                <div class="block mt-10">
+                  <button v-on:click="resetAllocations" class="flex py-2 px-4 m-auto rounded text-white border border-white hover:text-yellow-500 hover:border-yellow-500">
+                    <span class="flex pl-3 text-white">Reset allocations</span>
+                  </button>
+                </div>
+              </div>
+
             </div>
           </div>
           <div v-if="setAllocationsPressed">
@@ -143,6 +151,8 @@ export default {
     totalPercentage: 0,
     remainingTokens: 0,
     showRemainingTokens: false,
+    showSetAllocationButton: true,
+    showResetAllocationsButton: false,
     allocations: [
       {
         name: '',
@@ -190,12 +200,31 @@ export default {
       this.allocations.push(emptyAllocation);
     },
     setAllocations: function() {
-      // TODO
-      // calculate chart
-
+      this.showSetAllocationButton = false;
+      this.showResetAllocationsButton = true;
       this.showSetButton = false;
       this.$emit('setAllocations', this.allocations);
     },
+    resetAllocations: function() {
+      this.showSetAllocationButton = true;
+      this.showResetAllocationsButton = false;
+      this.allocations = [
+        {
+          name: '',
+          amount: null,
+          remainingAmount: null,
+          timelocked: false,
+          releaseDate: null,
+          interval: false,
+          intervalStartDate: null,
+          intervalPercentage: null,
+          intervalInDays: null,
+          exists: true,
+          percentage: 0,
+        }
+      ];
+      this.$emit('setAllocations', this.allocations);
+    }
   },
   watch: {
     allocations: {

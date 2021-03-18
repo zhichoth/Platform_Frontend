@@ -52,6 +52,7 @@
                   v-if="settingsIsValid"
                   :liquidity="liquidity"
                   :hardCap="settings.hardcap"
+                  :tokensPerEth="settings.tokensPerEth"
                   :key="key"
               />
 
@@ -160,14 +161,15 @@ export default {
     provider: window.ethereum,
     chainId: null,
     settings: {
-      address: '',
-      name: '',
+      address: '0x9C71795C559aaf3c423b8D743545741e2565c985',
+      name: 'presale',
       softcap: null,
       hardcap: null,
       totalTokens: null,
       tokenPresaleAllocation: null,
       startDate: null,
       endDate: null,
+      tokensPerEth: null,
     },
     settingsIsValid: false,
     liquidityIsValid: false,
@@ -254,6 +256,8 @@ export default {
         this.socials.splice(key, 1);
     },
     setAllocations: function(allocations) {
+      this.chartData.datasets[0].data = [];
+
       this.tokenomics = allocations;
 
       this.tokenomics.forEach((allocation) => {
@@ -537,11 +541,7 @@ export default {
       handler: function() {
         if (this.socials.length > 0) {
           for (let i = 0; i < this.socials.length; i++) {
-            if (this.socials[i].url !== '') {
-              this.socialsIsValid = true;
-            } else {
-              this.socialsIsValid = false;
-            }
+            this.socialsIsValid = this.socials[i].url !== '';
           }
         }
       },

@@ -27,11 +27,28 @@
                 <div class="grid grid-cols-5 gap-4 mt-5">
                   <div class="col-span-2 text-left">
                     <label :for="allocation.name" class="text-white">Allocation</label>
-                    <input type="text" v-model="allocation.name" placeholder="Name" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+                    <input
+                        type="text"
+                        v-model="allocation.name"
+                        placeholder="Name"
+                        class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                        text-gray-600 dark:text-gray-300
+                        border border-transparent
+                        focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                        bg-gray-100 dark:bg-gray-700">
                   </div>
                   <div class="text-left">
                     <label :for="allocation.amount" class="text-white">Amount</label>
-                    <input type="number" v-model="allocation.amount" min="0" placeholder="Amount" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+                    <input
+                        type="number"
+                        v-model="allocation.amount"
+                        min="0"
+                        placeholder="Amount"
+                        class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                        text-gray-600 dark:text-gray-300
+                        border border-transparent
+                        focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                        bg-gray-100 dark:bg-gray-700">
                   </div>
                   <div>
                     <label class="inline-flex items-center mt-9">
@@ -54,8 +71,12 @@
                       Release date
                     </label>
                     <input type="date"
-                           class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                           v-model="allocation.releaseDate">
+                           v-model="allocation.releaseDate"
+                           class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                            text-gray-600 dark:text-gray-300
+                            border border-transparent
+                            focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                            bg-gray-100 dark:bg-gray-700">
                   </label>
                 </div>
                 <div class="block w-full" v-if="allocation.interval">
@@ -67,8 +88,12 @@
                           Start date
                         </label>
                         <input type="date"
-                               class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                               v-model="allocation.intervalStartDate">
+                               v-model="allocation.intervalStartDate"
+                               class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                                text-gray-600 dark:text-gray-300
+                                border border-transparent
+                                focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                                bg-gray-100 dark:bg-gray-700">
                     </div>
                     <div class="col-span-1">
                       <label
@@ -78,8 +103,12 @@
                       </label>
                       <input type="number"
                              placeholder="Interval in days"
-                             class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                             v-model="allocation.intervalInDays">
+                             v-model="allocation.intervalInDays"
+                             class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                              text-gray-600 dark:text-gray-300
+                              border border-transparent
+                              focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                              bg-gray-100 dark:bg-gray-700">
                     </div>
                     <div class="col-span-1">
                       <label
@@ -89,8 +118,12 @@
                       </label>
                       <input type="number"
                              placeholder="Interval percentage"
-                             class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                             v-model="allocation.intervalPercentage">
+                             v-model="allocation.intervalPercentage"
+                             class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                  text-gray-600 dark:text-gray-300
+                  border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                  bg-gray-100 dark:bg-gray-700">
                     </div>
                   </div>
                 </div>

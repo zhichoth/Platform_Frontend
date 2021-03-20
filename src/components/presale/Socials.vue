@@ -14,7 +14,14 @@
               </svg>
             </div>
             <div class="flex w-full">
-              <input type="text" v-model="social.url" class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+              <input
+                  type="text"
+                  v-model="social.url"
+                  class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                        text-gray-600 dark:text-gray-300
+                        border border-transparent
+                        focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                        bg-gray-100 dark:bg-gray-700">
             </div>
             <div class="flex">
               <a v-on:click="deleteSocial(key)" class="mt-3 pl-3 cursor-pointer">

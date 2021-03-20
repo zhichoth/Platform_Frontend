@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard" v-if="isLoaded" class="h-vh">
+  <div id="dashboard" v-if="isLoaded" :class="presales.length > 0 ? 'h-full' : 'h-screen'">
     <transition name="slide-fade">
       <main v-if="isLoaded" class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
         <Header 
@@ -99,6 +99,10 @@ export default {
       await this.currentAccount();
       this.isLoaded = true;
     }
+
+    const isMobile = ('ontouchstart' in document.documentElement && /mobi/i.test(navigator.userAgent));
+    if (isMobile)
+      this.showError('Mobile not yet supported','For the best experience, please visit our website our website on a laptop')
   },
   methods: {
     getPresales: async function () {

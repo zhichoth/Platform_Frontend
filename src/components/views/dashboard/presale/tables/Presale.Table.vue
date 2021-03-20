@@ -1,6 +1,6 @@
 <template>
-  <div id="presale--table">
-    <div class="hidden mt-8 sm:block pt-4 px-4 sm:px-6 lg:px-8">
+  <div id="presale--table" >
+    <div class="mt-8 sm:block pt-4 px-4 sm:px-6 lg:px-8">
       <h2 class="text-gray-500 text-xs font-medium uppercase tracking-wide">Presale list</h2>
         <div v-if="presales.length > 0" class="align-middle inline-block min-w-full mt-3 border-b border-l border-r border-gray-200">
           <table class="min-w-full">

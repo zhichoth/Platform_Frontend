@@ -17,7 +17,11 @@
                   type="number"
                   v-model="liquidity.amount"
                   placeholder="Number of tokens to add as liquidity"
-                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+                  class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                  text-gray-600 dark:text-gray-300
+                  border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                  bg-gray-100 dark:bg-gray-700">
             </div>
           </div>
           <div class="block mt-4">
@@ -31,7 +35,11 @@
                   type="number"
                   v-model="liquidity.percentage"
                   placeholder="Precentage of raised ETH that will be added as liquidity"
-                  class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
+                  class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                  text-gray-600 dark:text-gray-300
+                  border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                  bg-gray-100 dark:bg-gray-700">
             </div>
             <div v-if="tokensPerEthStr" class="block mt-5 text-left">
               <span class="text-white">
@@ -86,8 +94,12 @@
                 Release date
               </label>
               <input type="date"
-                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                     v-model="liquidity.releaseDate">
+                     v-model="liquidity.releaseDate"
+                     class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                  text-gray-600 dark:text-gray-300
+                  border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                  bg-gray-100 dark:bg-gray-700">
             </label>
           </div>
           <div v-if="liquidity.interval" class="grid grid-cols-3 gap-4">
@@ -98,8 +110,12 @@
                 Start date
               </label>
               <input type="date"
-                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                     v-model="liquidity.intervalStartDate">
+                     v-model="liquidity.intervalStartDate"
+                     class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                  text-gray-600 dark:text-gray-300
+                  border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                  bg-gray-100 dark:bg-gray-700">
             </div>
             <div class="col-span-1">
               <label
@@ -109,8 +125,12 @@
               </label>
               <input type="number"
                      placeholder="Interval in days"
-                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                     v-model="liquidity.intervalInDays">
+                     v-model="liquidity.intervalInDays"
+                     class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                  text-gray-600 dark:text-gray-300
+                  border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                  bg-gray-100 dark:bg-gray-700">
             </div>
             <div class="col-span-1">
               <label
@@ -120,8 +140,12 @@
               </label>
               <input type="number"
                      placeholder="Interval percentage"
-                     class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700"
-                     v-model="liquidity.intervalPercentage">
+                     v-model="liquidity.intervalPercentage"
+                     class="w-full mt-2 mb-2 px-3 py-1 rounded-lg
+                  text-gray-600 dark:text-gray-300
+                  border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent
+                  bg-gray-100 dark:bg-gray-700">
             </div>
           </div>
         </div>

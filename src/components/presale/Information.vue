@@ -37,7 +37,7 @@
               <input
                   type="text"
                   v-model="token.name"
-                  placeholder="YSEC"
+                  placeholder="Name"
                   class="w-full mt-2 mb-2 px-3 py-1 border rounded-lg text-gray-600 dark:text-gray-300 focus:text-yellow-500 focus:outline-none focus:border-yellow-500 bg-gray-100 dark:bg-gray-700">
             </div>
             <label
@@ -172,6 +172,7 @@ export default {
         if (this.token.hardcap !== null && this.token.tokenPresaleAllocation !== null) {
           const tokenPerEth = this.token.tokenPresaleAllocation / this.token.hardcap;
           this.tokensPerEth = `${tokenPerEth} tokens per ETH`;
+          this.token.tokensPerEth = tokenPerEth;
 
           const ethPerToken = this.token.hardcap / this.token.tokenPresaleAllocation;
           this.ethPerToken =`${ethPerToken} ETH per token`;

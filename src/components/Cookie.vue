@@ -10,7 +10,7 @@
             </svg>
           </span>
             <p class="ml-3 font-medium text-white truncate">
-              <span class="hidden md:inline">
+              <span class="md:inline">
                 We use cookies to make your experience better.
               </span>
             </p>
@@ -22,7 +22,7 @@
               Learn more
             </router-link>
           </div>
-          <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
+          <div class="order-2 block flex-shrink-0 sm:order-3 sm:ml-2">
             <a v-on:click="setCookie" class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700">
               Accept
             </a>

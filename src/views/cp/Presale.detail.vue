@@ -374,7 +374,7 @@ export default {
       if (response.status === 200)
         return response.data.result.XETHZUSD.c[0];
       else
-        this.showError('Ethereum price not fetched.', 
+        this.showError('Ethereum price not fetched.',
             'Something went wrong fetching Ethereum price, please try again');
     },
     getTokenPrice: function() {

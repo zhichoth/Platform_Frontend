@@ -262,6 +262,8 @@ export default {
       this.account = this.$store.getters.account;
       this.chainId = this.provider.chainId;
       this.isConnected = true;
+    } else {
+      
     }
   },
   mounted: async function () {

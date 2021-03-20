@@ -181,10 +181,10 @@ export default {
         // TODO
         // User deposited to presale
         // get information
-        const getUserPresaleInformation = await this.getUserPresaleInformation();
-
-        this.$store.state.pinnedPresales = pinnedPresales;
-        localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
+        // const getUserPresaleInformation = await this.getUserPresaleInformation();
+        //
+        // this.$store.state.pinnedPresales = pinnedPresales;
+        // localStorage.setItem('pinnedPresales', JSON.stringify(this.$store.getters.pinnedPresales));
       }
 
       await this.setPinnedPresales();
@@ -196,8 +196,7 @@ export default {
         return this.showError(response);
 
       const presaleContractAbi = response.data.abi;
-      const web3 = new Web3(this.provider); // TODO Remove later "http://127.0.0.1:7545"
-      console.log(web3);
+      const web3 = new Web3(this.provider);
 
       const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
       // presaleContractInterface.options.address = process.env.VUE_APP_PRESALE_CONTRACT;

@@ -296,8 +296,8 @@ export default {
         EndDate: new Date(this.settings.endDate).getTime(),
         Softcap: `${softCap}`,
         Hardcap: `${hardCap}`,
-        TokenPresaleAllocation: `${this.settings.tokenPresaleAllocation}`,
-        TokenLiqAmount: `${this.liquidity.amount}`,
+        TokenPresaleAllocation: web3.utils.toWei(this.settings.tokenPresaleAllocation),
+        TokenLiqAmount: web3.utils.toWei(this.liquidity.amount),
         LiqPercentage: `${this.liquidity.percentage}`,
         PermalockLiq: this.liquidity.permaBurn,
         LiquidityTokenAllocation: liqTokenAllocation,
@@ -342,6 +342,7 @@ export default {
       };
     },
     addTokenAllocation: function() {
+      const web3 = new Web3(this.provider);
       const tokenAllocations = [];
       for (let i = 0; i < this.tokenomics.length; i++) {
         const allocation = this.tokenomics[i];
@@ -349,7 +350,7 @@ export default {
           if (allocation.interval) {
             const dto = {
               Name: allocation.name,
-              Amount: allocation.amount,
+              Amount: web3.utils.toWei(allocation.amount),
               RemainingAmount: 0,//TODO
               ReleaseDate: 1,
               IsInterval: allocation.interval,
@@ -363,7 +364,7 @@ export default {
           } else {
             const dto = {
               Name: allocation.name,
-              Amount: allocation.amount,
+              Amount: web3.utils.toWei(allocation.amount),
               RemainingAmount: 0,//TODO
               ReleaseDate: new Date(allocation.releaseDate).getTime(),
               IsInterval: allocation.interval,

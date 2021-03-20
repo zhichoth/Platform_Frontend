@@ -289,9 +289,11 @@ export default {
     // await this.queryPresaleData();
     // await this.getPresalesGraph();
     this.isLoaded = true;
+
+    await this.getEthPrice();
   },
   methods: {
-    getPresaleData: async function () {
+    getPresaleData: async function() {
       const presaleContractAbi = this.contractAbi;
       const web3 = new Web3(this.provider);
       const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
@@ -321,8 +323,7 @@ export default {
             });
             console.log(this.presale.CurrentStep)
     },
-
-    getContributedEth: async function () {
+    getContributedEth: async function() {
       const presaleContractAbi = this.contractAbi;
       const web3 = new Web3(this.provider);
       const presaleContractInterface = new web3.eth.Contract(presaleContractAbi);
@@ -337,8 +338,7 @@ export default {
             });
     
     },
-
-    queryPresaleData: async function () {
+    queryPresaleData: async function() {
       const response = await axios.get(`${process.env.VUE_APP_SERVICE_PHP}/presale/${this.id}`);
       if (response.status !== 200)
         return this.showError(response);
@@ -361,20 +361,23 @@ export default {
 
       this.presale = presale;
     },
-    getPresalesGraph: async function () {
+    getPresalesGraph: async function() {
       if (this.presale.tokens && this.presale.tokens.length > 0) {
         for (let index = 0; index < this.presale.tokens.length; index++) {
           this.presale.chartData.datasets[0].data.push(Number(this.presale.tokens[index].liquidity));
         }
       }
     },
+    getEthPrice: async function() {
+      const response = await axios.get(process.env.VUE_APP_KRAKEN_API);
 
-    // getEthPrice: async function(){
-    //   const response = await axios.get(`https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${process.env.VUE_APP_ETHERSCAN_API}`);
-    //   return response;
-    // },
-
-    getTokenPrice: function(){
+      if (response.status === 200)
+        return response.data.result.XETHZUSD.c[0];
+      else
+        this.showError('Ethereum price not fetched.', 
+            'Something went wrong fetching Ethereum price, please try again');
+    },
+    getTokenPrice: function() {
       // const currentEthPrice = this.getEthPrice(); 
       return (parseInt(this.presale.TokensInPresale) / parseInt(this.presale.Hardcap));
     },

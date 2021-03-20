@@ -277,7 +277,10 @@ export default {
       this.chainId = this.provider.chainId;
       this.isConnected = true;
     } else {
-      
+      // Detect provider
+      await this.detectProvider();
+      // Connect to your account
+      await this.currentAccount();
     }
   },
   mounted: async function () {
@@ -397,6 +400,65 @@ export default {
         const parts = x.toString().split(".");
         parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,".");
         return parts.join(",");
+    },
+    detectProvider: async function () {
+      // Great change MetaMask is not installed
+      if (this.provider === undefined) {
+        return this.showError(
+            'MetaMask is not installed.',
+            'It looks like the connection to the MetaMask wallet failed. Try connecting again.',
+            false,
+            true);
+      }
+
+      if (!this.provider.isMetaMask)
+        return this.showError(
+            'MetaMask connection failed.',
+            'It looks like the connection to the MetaMask wallet failed. Try connecting again.');
+    },
+    currentAccount: async function () {
+      // connect to MetaMask account
+      this.chainId = this.provider.chainId;
+      this.provider
+          .request({ method: 'eth_accounts' })
+          .then(this.handleAccountsChanged(this.provider._state.accounts))
+          .catch((err) => {
+            // Some unexpected error.
+            // For backwards compatibility reasons, if no accounts are available,
+            // eth_accounts will return an empty array.
+            this.showError(
+                'Unexpected error',
+                err);
+          });
+    },
+    handleAccountsChanged: function (accounts) {
+      if (accounts !== null && accounts.length === 0) {
+        // MetaMask is locked or the user has not connected any accounts
+        this.isConnected = false;
+        this.showError(
+            'No connections made',
+            'Click the connect button to connect your MetaMask account',
+            true);
+      } else {
+        this.$store.state.account = accounts[0];
+        this.account = accounts[0];
+        // show user that MetaMask is connected
+        this.isConnected = true;
+      }
+    },
+    connectAccount: function () {
+      this.provider
+          .request({ method: 'eth_requestAccounts' })
+          .then(this.handleAccountsChanged(this.provider._state.accounts))
+          .catch((err) => {
+            if (err.code === 4001) {
+              // EIP-1193 userRejectedRequest error
+              // If this happens, the user rejected the connection request.
+              this.showError('Please connect to MetaMask.', err.message);
+            } else {
+              this.showError('Something went wrong', err.message);
+            }
+          });
     },
     showError: function (
         title,

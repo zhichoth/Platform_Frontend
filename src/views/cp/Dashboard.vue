@@ -102,7 +102,7 @@ export default {
 
     const isMobile = ('ontouchstart' in document.documentElement && /mobi/i.test(navigator.userAgent));
     if (isMobile)
-      this.showError('Mobile not yet supported','For the best experience, please visit our website our website on a laptop')
+      this.showError('Mobile not yet supported','For the best experience, please visit our website on a laptop')
   },
   methods: {
     getPresales: async function () {

@@ -108,7 +108,7 @@ export default {
             this.presales = response.data.items;
           }
         }).catch((e) => {
-          console.log(e);
+          console.log(e.request);
           this.showError('Error');
         }).finally(() => {
           this.$loading(false);

@@ -376,11 +376,7 @@ export default {
 
     getTokenPrice: function(){
       // const currentEthPrice = this.getEthPrice(); 
-      const tokenPriceInEth = (parseInt(this.presale.TokensInPresale) / parseInt(this.presale.Hardcap));
-
-      return tokenPriceInEth;
-    
-
+      return (parseInt(this.presale.TokensInPresale) / parseInt(this.presale.Hardcap));
     },
 
     // getAllowance: async function (){
